@@ -274,6 +274,7 @@
         resizeCanvas();
 
         let lightningOpacity = 0;
+        let activeStrikes = [];
 
         function createLightningPath(startX, startY, endY, segments) {
             let path = [{x: startX, y: startY}];
@@ -283,7 +284,7 @@
 
             for (let i = 0; i < segments; i++) {
                 currentY += segmentHeight;
-                let deviation = (Math.random() - 0.5) * 90; 
+                let deviation = (Math.random() - 0.5) * 110; 
                 currentX += deviation;
                 path.push({x: currentX, y: currentY});
             }
@@ -306,15 +307,13 @@
             ctx.stroke();
         }
 
-        let activeStrikes = [];
-
         function triggerLightningStrike() {
             activeStrikes = [];
             let totalStrikes = Math.floor(Math.random() * 3) + 2; 
 
             for (let i = 0; i < totalStrikes; i++) {
                 let startX = Math.random() * canvas.width;
-                let path = createLightningPath(startX, 0, canvas.height, 12);
+                let path = createLightningPath(startX, 0, canvas.height, 10);
                 activeStrikes.push(path);
             }
             lightningOpacity = 1.0; 
@@ -327,7 +326,8 @@
         const songUrl = 'vyralphonk.mp3?v=' + Date.now();
 
         let bassHistory = [];
-        const historySize = 25; 
+        const historySize = 20; 
+        let lastStrikeTime = 0;
 
         function setupAndPlayAudio() {
             try {
@@ -351,6 +351,8 @@
                     audioCtx.resume();
                 }
 
+                audio.currentTime = 7;
+
                 audio.play().then(() => {
                     isPlaying = true;
                     animateDance();
@@ -372,7 +374,7 @@
 
             analyser.getByteFrequencyData(dataArray);
             
-            let bassValue = (dataArray[0] + dataArray[1] + dataArray[2]) / 3;
+            let bassValue = (dataArray[0] + dataArray[1] + dataArray[2] + dataArray[3]) / 4;
 
             let sum = 0;
             for (let i = 0; i < bassHistory.length; i++) {
@@ -385,28 +387,28 @@
                 bassHistory.shift();
             }
 
-            if (bassValue > bassAverage * 1.08 && bassValue > 160) {
-                if (lightningOpacity <= 0.1) { 
-                    triggerLightningStrike();
-                }
+            let currentTime = Date.now();
+            if (bassValue > bassAverage * 1.04 && (currentTime - lastStrikeTime > 180)) {
+                triggerLightningStrike();
+                lastStrikeTime = currentTime;
             }
 
             if (lightningOpacity > 0) {
                 ctx.globalAlpha = lightningOpacity;
                 
                 activeStrikes.forEach(path => {
-                    drawLightning(path, 4, 30, '#ff4d4d');
+                    drawLightning(path, 5, 35, '#ff3333');
                     drawLightning(path, 1.5, 5, '#ffffff');
                 });
                 
-                lightningOpacity *= 0.78; 
+                lightningOpacity *= 0.75; 
                 if (lightningOpacity < 0.01) lightningOpacity = 0;
             }
 
             let normalized = bassValue / 255;
             let glowIntensity = normalized * 50; 
             
-            let redShift = Math.floor(13 + (lightningOpacity * 40)); 
+            let redShift = Math.floor(13 + (lightningOpacity * 35)); 
             let colorPulse = `rgb(${redShift}, 13, 17)`;
 
             document.documentElement.style.setProperty('--beat-glow', `${glowIntensity}px`);
