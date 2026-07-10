@@ -1,0 +1,193 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Modding</title>
+    <style>
+        /* --- GLOBAL STYLES --- */
+        body {
+            background-color: #0d0d11;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 60px 20px 80px 20px; /* Added extra bottom padding for the home button */
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* --- GLOWING TYPEWRITER EFFECT --- */
+        .title-container {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+
+        .typewriter-text {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 51, 51, 0.8), 
+                         0 0 20px rgba(255, 51, 51, 0.6);
+            letter-spacing: 2px;
+            border-right: 3px solid #ff3333;
+            white-space: nowrap;
+            background: transparent;
+            padding-right: 4px;
+            animation: blink 0.75s step-end infinite;
+        }
+
+        @keyframes blink {
+            from, to { border-color: transparent }
+            50% { border-color: #ff3333; }
+        }
+
+        /* --- BUTTONS CONTAINER --- */
+        .links-container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 40px; /* Space between links and home button */
+        }
+
+        /* --- EDITABLE BUTTON STYLES --- */
+        .card-link {
+            background: linear-gradient(135deg, #16161f 0%, #1f1f2e 100%);
+            border: 1px solid #33334d;
+            border-radius: 12px;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .card-link:hover {
+            transform: translateY(-3px);
+            border-color: #ff3333;
+            box-shadow: 0 6px 20px rgba(255, 51, 51, 0.2);
+        }
+
+        .btn-name {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #ff4d4d;
+            margin-bottom: 5px;
+        }
+
+        .btn-description {
+            font-size: 0.9rem;
+            color: #b0b0bc;
+            line-height: 1.4;
+        }
+
+        /* --- SMALL HOME BUTTON STYLE --- */
+        .home-btn {
+            background: #16161f;
+            border: 1px solid #33334d;
+            border-radius: 20px;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #b0b0bc;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            margin-top: auto; /* Pushes to bottom if content is short */
+        }
+
+        .home-btn:hover {
+            border-color: #ff3333;
+            color: #ffffff;
+            box-shadow: 0 0 12px rgba(255, 51, 51, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="title-container">
+        <div class="typewriter-text" id="typewriter"></div>
+    </div>
+
+    <div class="links-container">
+
+        <a href="https://www.mediafire.com/file/t23dd7pamxgjkq4/CyberMenu.rar/file" download="" class="card-link">
+            <span class="btn-name">Cyber Menu</span>
+            <span class="btn-description">The Mod Menu</span>
+        </a>
+
+        <a href="https://www.mediafire.com/file/u8v7n05jvaqgcu3/QuestServers(Same+as+bypass).rar/file" download="" class="card-link">
+            <span class="btn-name">Quest Servers</span>
+            <span class="btn-description">Quest Servers For Steam AC</span>
+        </a>
+
+        <a href="https://www.mediafire.com/file/uqffh0wu8q9bub6/BypassByCatsAndBlue.rar/file" download="" class="card-link">
+            <span class="btn-name">EAC Bypass</span>
+            <span class="btn-description">Easy Anti Cheat Bypass Download</span>
+        </a>
+
+        <a href="https://discord.gg/Gu8EGfkn4k" target="_blank" class="card-link">
+            <span class="btn-name">Cyber Mods Discord Server</span>
+            <span class="btn-description">Join The Cyber Mods Discord For Updated Mods And Paid Mods</span>
+        </a>
+
+    </div>
+
+    <a href="https://stripesvr.neocities.org" class="home-btn">Home</a>
+
+    <script>
+        // --- EDIT YOUR TITLE HERE ---
+        const textArray = ["Cyber Modding"]; 
+        
+        let textIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typeSpeed = 150;  
+        const eraseSpeed = 100; 
+        const delayBetween = 2500; 
+        const typewriterElement = document.getElementById("typewriter");
+
+        function type() {
+            const currentText = textArray[textIndex];
+            
+            if (isDeleting) {
+                typewriterElement.textContent = currentText.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                typewriterElement.textContent = currentText.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            let nextActionSpeed = isDeleting ? eraseSpeed : typeSpeed;
+
+            if (!isDeleting && charIndex === currentText.length) {
+                nextActionSpeed = delayBetween; 
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                textIndex = (textIndex + 1) % textArray.length; 
+                nextActionSpeed = 500; 
+            }
+
+            setTimeout(type, nextActionSpeed);
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            setTimeout(type, 500);
+        });
+    </script>
+
+
+
+</body></html>
