@@ -8,15 +8,11 @@
         :root {
             --beat-glow: 0px;
             --beat-color-pulse: #0d0d11;
-            --flash-intensity: 0;
         }
 
         body {
             background-color: var(--beat-color-pulse);
-            background-image: 
-                linear-gradient(rgba(255, 0, 0, var(--flash-intensity)), rgba(0, 0, 0, 0)),
-                radial-gradient(circle at center, rgba(255, 30, 30, 0.15) 0%, transparent 80%);
-            background-blend-mode: screen;
+            background-image: radial-gradient(circle at center, rgba(255, 30, 30, 0.15) 0%, transparent 80%);
             color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
@@ -28,6 +24,17 @@
             padding: 40px 20px;
             box-sizing: border-box;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        canvas#lightning-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
         }
 
         .main-content {
@@ -38,6 +45,8 @@
             filter: blur(20px);
             transition: filter 1.2s cubic-bezier(0.25, 1, 0.5, 1);
             pointer-events: none;
+            position: relative;
+            z-index: 2;
         }
 
         .main-content.active {
@@ -179,6 +188,7 @@
 </head>
 <body>
 
+    <canvas id="lightning-canvas"></canvas>
     <audio id="bg-audio" crossorigin="anonymous"></audio>
 
     <div class="enter-overlay" id="overlay-screen">
@@ -253,13 +263,69 @@
             setTimeout(type, nextActionSpeed);
         }
 
+        const canvas = document.getElementById('lightning-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let lightningOpacity = 0;
+
+        function createLightningPath(startX, startY, endY, segments) {
+            let path = [{x: startX, y: startY}];
+            let currentX = startX;
+            let currentY = startY;
+            let segmentHeight = (endY - startY) / segments;
+
+            for (let i = 0; i < segments; i++) {
+                currentY += segmentHeight;
+                let deviation = (Math.random() - 0.5) * 90; 
+                currentX += deviation;
+                path.push({x: currentX, y: currentY});
+            }
+            return path;
+        }
+
+        function drawLightning(path, width, glowSize, color) {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width;
+            ctx.shadowBlur = glowSize;
+            ctx.shadowColor = '#ff0000';
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            ctx.beginPath();
+            ctx.moveTo(path[0].x, path[0].y);
+            for (let i = 1; i < path.length; i++) {
+                ctx.lineTo(path[i].x, path[i].y);
+            }
+            ctx.stroke();
+        }
+
+        let activeStrikes = [];
+
+        function triggerLightningStrike() {
+            activeStrikes = [];
+            let totalStrikes = Math.floor(Math.random() * 3) + 2; 
+
+            for (let i = 0; i < totalStrikes; i++) {
+                let startX = Math.random() * canvas.width;
+                let path = createLightningPath(startX, 0, canvas.height, 12);
+                activeStrikes.push(path);
+            }
+            lightningOpacity = 1.0; 
+        }
+
         let audioCtx, analyser, dataArray, sourceNode;
         let isPlaying = false;
         const audio = document.getElementById('bg-audio');
         
         const songUrl = 'vyralphonk.mp3?v=' + Date.now();
 
-        let visualFlash = 0; 
         let bassHistory = [];
         const historySize = 25; 
 
@@ -299,6 +365,9 @@
 
         function animateDance() {
             requestAnimationFrame(animateDance);
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
             if (!isPlaying) return;
 
             analyser.getByteFrequencyData(dataArray);
@@ -316,21 +385,32 @@
                 bassHistory.shift();
             }
 
-            if (bassValue > bassAverage * 1.08 && bassValue > 150) {
-                visualFlash = 0.65; 
-            } else {
-                visualFlash *= 0.82; 
+            if (bassValue > bassAverage * 1.08 && bassValue > 160) {
+                if (lightningOpacity <= 0.1) { 
+                    triggerLightningStrike();
+                }
+            }
+
+            if (lightningOpacity > 0) {
+                ctx.globalAlpha = lightningOpacity;
+                
+                activeStrikes.forEach(path => {
+                    drawLightning(path, 4, 30, '#ff4d4d');
+                    drawLightning(path, 1.5, 5, '#ffffff');
+                });
+                
+                lightningOpacity *= 0.78; 
+                if (lightningOpacity < 0.01) lightningOpacity = 0;
             }
 
             let normalized = bassValue / 255;
             let glowIntensity = normalized * 50; 
             
-            let redShift = Math.floor(13 + (visualFlash * 110)); 
+            let redShift = Math.floor(13 + (lightningOpacity * 40)); 
             let colorPulse = `rgb(${redShift}, 13, 17)`;
 
             document.documentElement.style.setProperty('--beat-glow', `${glowIntensity}px`);
             document.documentElement.style.setProperty('--beat-color-pulse', colorPulse);
-            document.documentElement.style.setProperty('--flash-intensity', visualFlash);
         }
 
         const overlay = document.getElementById('overlay-screen');
