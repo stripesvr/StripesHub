@@ -15,7 +15,7 @@
             background-color: var(--beat-color-pulse);
             background-image: 
                 linear-gradient(rgba(255, 0, 0, var(--flash-intensity)), rgba(0, 0, 0, 0)),
-                radial-gradient(circle at center, rgba(255, 30, 30, 0.4) 0%, transparent 80%);
+                radial-gradient(circle at center, rgba(255, 30, 30, 0.15) 0%, transparent 80%);
             background-blend-mode: screen;
             color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -86,7 +86,7 @@
             height: 150px;
             object-fit: cover;
             border: 5px solid #ff1111;
-            box-shadow: 0 0 calc(30px + var(--beat-glow)) rgba(255, 10, 10, 0.9);
+            box-shadow: 0 0 calc(20px + var(--beat-glow)) rgba(255, 10, 10, 0.6);
             margin-bottom: 20px;
             border-radius: 50%;
         }
@@ -103,8 +103,8 @@
             font-size: 2.5rem;
             font-weight: bold;
             color: #ffffff;
-            text-shadow: 0 0 calc(20px + var(--beat-glow)) rgba(255, 10, 10, 1), 
-                         0 0 calc(40px + (var(--beat-glow) * 2)) rgba(255, 0, 0, 0.8);
+            text-shadow: 0 0 calc(15px + var(--beat-glow)) rgba(255, 10, 10, 0.8), 
+                         0 0 calc(30px + var(--beat-glow)) rgba(255, 0, 0, 0.5);
             letter-spacing: 2px;
             border-right: 3px solid #ff1111;
             white-space: nowrap;
@@ -259,6 +259,9 @@
         
         const songUrl = 'vyralphonk.mp3?v=' + Date.now();
 
+        let visualFlash = 0; 
+        let previousVolume = 0;
+
         function setupAndPlayAudio() {
             try {
                 audio.src = songUrl;
@@ -304,23 +307,26 @@
             let subBass = dataArray[0] || 0;
             let upperMids = dataArray[4] || 0; 
             
-            let rawAudioValue = Math.max(subBass, lowBass, midBass, upperMids);
+            let currentVolume = Math.max(subBass, lowBass, midBass, upperMids);
             
-            let sensitivityMultiplier = 2.2; 
-            let finalValue = Math.min(255, rawAudioValue * sensitivityMultiplier);
-            
-            let normalized = finalValue / 255;
+            let volumeChange = currentVolume - previousVolume;
+            previousVolume = currentVolume;
 
-            let glowIntensity = normalized * 140; 
+            if (volumeChange > 25) { 
+                visualFlash = 0.55; 
+            } else {
+                visualFlash *= 0.88; 
+            }
+
+            let normalized = currentVolume / 255;
+            let glowIntensity = normalized * 60; 
             
-            let redShift = Math.floor(13 + (normalized * 120)); 
+            let redShift = Math.floor(13 + (visualFlash * 120)); 
             let colorPulse = `rgb(${redShift}, 13, 17)`;
-
-            let flashMix = normalized > 0.7 ? (normalized - 0.7) * 3.0 : 0;
 
             document.documentElement.style.setProperty('--beat-glow', `${glowIntensity}px`);
             document.documentElement.style.setProperty('--beat-color-pulse', colorPulse);
-            document.documentElement.style.setProperty('--flash-intensity', flashMix);
+            document.documentElement.style.setProperty('--flash-intensity', visualFlash);
         }
 
         const overlay = document.getElementById('overlay-screen');
