@@ -388,7 +388,10 @@
             }
 
             let currentTime = Date.now();
-            if (bassValue > bassAverage * 1.04 && (currentTime - lastStrikeTime > 180)) {
+            let timeSinceLastStrike = currentTime - lastStrikeTime;
+
+            // Natural audio threshold trigger OR fallback trigger if volume stays maxed out for too long
+            if ((bassValue > bassAverage * 1.04 && timeSinceLastStrike > 180) || (bassValue >= 240 && timeSinceLastStrike > 320)) {
                 triggerLightningStrike();
                 lastStrikeTime = currentTime;
             }
