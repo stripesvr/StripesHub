@@ -195,7 +195,7 @@
 </head>
 <body>
 
-    <audio id="bg-audio"></audio>
+    <audio id="bg-audio" crossorigin="anonymous"></audio>
 
     <div class="enter-overlay" id="overlay-screen">
         <div class="enter-text" id="enter-status">Click to Enter...</div>
@@ -275,8 +275,8 @@
         let isPlaying = false;
         const audio = document.getElementById('bg-audio');
         
-        // Direct local reference to your music file
-        const songUrl = 'vyralphonk.mp3';
+        // Added unique version parameter to force browser to re-request headers from GitHub CDN
+        const songUrl = 'vyralphonk.mp3?v=' + Date.now();
 
         function setupAndPlayAudio() {
             try {
@@ -296,11 +296,16 @@
                 sourceNode.connect(analyser);
                 analyser.connect(audioCtx.destination);
 
+                // Safety resume check specifically required for mobile web browsers
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
                 audio.play().then(() => {
                     isPlaying = true;
                     animateDance();
                 }).catch(err => {
-                    console.error("Playback failed. Make sure the file exists in this directory:", err);
+                    console.error("Playback failed:", err);
                 });
 
             } catch (err) {
