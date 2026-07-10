@@ -195,7 +195,7 @@
 </head>
 <body>
 
-    <audio id="bg-audio" crossorigin="anonymous"></audio>
+    <audio id="bg-audio"></audio>
 
     <div class="enter-overlay" id="overlay-screen">
         <div class="enter-text" id="enter-status">Click to Enter...</div>
@@ -272,12 +272,11 @@
 
         // --- DYNAMIC AUDIO PIPELINE ---
         let audioCtx, analyser, dataArray, sourceNode;
-        let isPlaying = true;
+        let isPlaying = false;
         const audio = document.getElementById('bg-audio');
         
-        // Added a public CORS proxy helper prefix to bypass the GitHub domain block
-        const rawSongUrl = 'vyralphonk.mp3';
-        const songUrl = 'https://corsproxy.io/?' + encodeURIComponent(rawSongUrl);
+        // Direct local reference to your music file
+        const songUrl = 'vyralphonk.mp3';
 
         function setupAndPlayAudio() {
             try {
@@ -301,7 +300,7 @@
                     isPlaying = true;
                     animateDance();
                 }).catch(err => {
-                    console.error("Playback failed:", err);
+                    console.error("Playback failed. Make sure the file exists in this directory:", err);
                 });
 
             } catch (err) {
@@ -321,7 +320,7 @@
             
             let rawAudioValue = Math.max(lowBass, midBass, upperMids);
             
-            let sensitivityMultiplier = 1.7; // Highly sensitive beat calculation
+            let sensitivityMultiplier = 1.7; 
             let finalValue = Math.min(255, rawAudioValue * sensitivityMultiplier);
             
             let glowIntensity = (finalValue / 255) * 85; 
