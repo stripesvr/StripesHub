@@ -260,7 +260,8 @@
         const songUrl = 'vyralphonk.mp3?v=' + Date.now();
 
         let visualFlash = 0; 
-        let previousVolume = 0;
+        let bassHistory = [];
+        const historySize = 25; 
 
         function setupAndPlayAudio() {
             try {
@@ -271,7 +272,7 @@
                 audioCtx = new AudioContextClass();
                 analyser = audioCtx.createAnalyser();
                 
-                analyser.fftSize = 32; 
+                analyser.fftSize = 64; 
                 
                 const bufferLength = analyser.frequencyBinCount;
                 dataArray = new Uint8Array(bufferLength);
@@ -302,26 +303,29 @@
 
             analyser.getByteFrequencyData(dataArray);
             
-            let lowBass = dataArray[1] || 0; 
-            let midBass = dataArray[2] || 0;
-            let subBass = dataArray[0] || 0;
-            let upperMids = dataArray[4] || 0; 
-            
-            let currentVolume = Math.max(subBass, lowBass, midBass, upperMids);
-            
-            let volumeChange = currentVolume - previousVolume;
-            previousVolume = currentVolume;
+            let bassValue = (dataArray[0] + dataArray[1] + dataArray[2]) / 3;
 
-            if (volumeChange > 25) { 
-                visualFlash = 0.55; 
-            } else {
-                visualFlash *= 0.88; 
+            let sum = 0;
+            for (let i = 0; i < bassHistory.length; i++) {
+                sum += bassHistory[i];
+            }
+            let bassAverage = bassHistory.length > 0 ? sum / bassHistory.length : 120;
+
+            bassHistory.push(bassValue);
+            if (bassHistory.length > historySize) {
+                bassHistory.shift();
             }
 
-            let normalized = currentVolume / 255;
-            let glowIntensity = normalized * 60; 
+            if (bassValue > bassAverage * 1.08 && bassValue > 150) {
+                visualFlash = 0.65; 
+            } else {
+                visualFlash *= 0.82; 
+            }
+
+            let normalized = bassValue / 255;
+            let glowIntensity = normalized * 50; 
             
-            let redShift = Math.floor(13 + (visualFlash * 120)); 
+            let redShift = Math.floor(13 + (visualFlash * 110)); 
             let colorPulse = `rgb(${redShift}, 13, 17)`;
 
             document.documentElement.style.setProperty('--beat-glow', `${glowIntensity}px`);
