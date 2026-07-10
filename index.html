@@ -7,9 +7,8 @@
     <style>
         :root {
             --beat-glow: 0px;
-            --beat-scale: 1;
             --beat-color-pulse: #0d0d11;
-            --flash-intensity: 0%;
+            --flash-intensity: 0;
         }
 
         body {
@@ -28,7 +27,6 @@
             margin: 0;
             padding: 40px 20px;
             box-sizing: border-box;
-            transition: background-color 0.01s linear;
             overflow-x: hidden;
         }
 
@@ -90,19 +88,7 @@
             border: 5px solid #ff1111;
             box-shadow: 0 0 calc(30px + var(--beat-glow)) rgba(255, 10, 10, 0.9);
             margin-bottom: 20px;
-            transform: scale(var(--beat-scale));
-            transition: transform 0.01s linear, box-shadow 0.01s linear;
-        }
-
-        .main-content.active .profile-pic {
-            animation: borderDance 0.15s infinite alternate linear;
-        }
-
-        @keyframes borderDance {
-            0% { border-radius: 50% 50% 50% 50%; }
-            33% { border-radius: 35% 65% 38% 62% / 62% 40% 60% 38%; }
-            66% { border-radius: 65% 35% 60% 40% / 38% 62% 38% 62%; }
-            100% { border-radius: 40% 60% 35% 65% / 60% 40% 60% 40%; }
+            border-radius: 50%;
         }
 
         .title-container {
@@ -150,13 +136,12 @@
             color: #ffffff;
             display: flex;
             flex-direction: column;
-            transform: scale(calc(1 + (var(--beat-scale) - 1) * 0.3));
             transition: all 0.1s ease;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .card-link:hover {
-            transform: translateY(-3px) scale(1.03);
+            transform: translateY(-3px);
             border-color: #ff1111;
             box-shadow: 0 6px 25px rgba(255, 10, 10, 0.5);
         }
@@ -327,17 +312,15 @@
             let normalized = finalValue / 255;
 
             let glowIntensity = normalized * 140; 
-            let scaleMultiplier = 1 + (normalized * 0.45); 
             
-            let redShift = Math.floor(10 + (normalized * 180)); 
-            let colorPulse = `rgb(${redShift}, 8, 12)`;
+            let redShift = Math.floor(13 + (normalized * 120)); 
+            let colorPulse = `rgb(${redShift}, 13, 17)`;
 
-            let flashMix = normalized > 0.65 ? (normalized - 0.65) * 2.5 : 0;
+            let flashMix = normalized > 0.7 ? (normalized - 0.7) * 3.0 : 0;
 
             document.documentElement.style.setProperty('--beat-glow', `${glowIntensity}px`);
-            document.documentElement.style.setProperty('--beat-scale', scaleMultiplier);
             document.documentElement.style.setProperty('--beat-color-pulse', colorPulse);
-            document.documentElement.style.setProperty('--flash-intensity', `${flashMix}`);
+            document.documentElement.style.setProperty('--flash-intensity', flashMix);
         }
 
         const overlay = document.getElementById('overlay-screen');
