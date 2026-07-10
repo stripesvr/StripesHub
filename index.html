@@ -5,16 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StripesVR Homepage</title>
     <style>
-        /* --- GLOBAL & DANCING STYLES --- */
         :root {
             --beat-glow: 0px;
             --beat-scale: 1;
             --beat-color-pulse: #0d0d11;
+            --flash-intensity: 0%;
         }
 
         body {
             background-color: var(--beat-color-pulse);
-            background-image: radial-gradient(circle at center, rgba(255, 51, 51, 0.15) 0%, transparent 70%);
+            background-image: 
+                linear-gradient(rgba(255, 0, 0, var(--flash-intensity)), rgba(0, 0, 0, 0)),
+                radial-gradient(circle at center, rgba(255, 30, 30, 0.4) 0%, transparent 80%);
+            background-blend-mode: screen;
             color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
@@ -25,11 +28,10 @@
             margin: 0;
             padding: 40px 20px;
             box-sizing: border-box;
-            transition: background-color 0.02s ease;
+            transition: background-color 0.01s linear;
             overflow-x: hidden;
         }
 
-        /* --- BLUR EFFECT WRAPPER --- */
         .main-content {
             width: 100%;
             display: flex;
@@ -45,7 +47,6 @@
             pointer-events: auto;
         }
 
-        /* --- CLICK TO ENTER OVERLAY --- */
         .enter-overlay {
             position: fixed;
             top: 0;
@@ -82,30 +83,28 @@
             50% { transform: scale(1.05); opacity: 1; }
         }
 
-        /* --- PROFILE IMAGE WITH INDEPENDENT DANCE ANIMATION --- */
         .profile-pic {
             width: 150px;
             height: 150px;
             object-fit: cover;
-            border: 4px solid #ff3333;
-            box-shadow: 0 0 calc(20px + var(--beat-glow)) rgba(255, 51, 51, 0.6);
+            border: 5px solid #ff1111;
+            box-shadow: 0 0 calc(30px + var(--beat-glow)) rgba(255, 10, 10, 0.9);
             margin-bottom: 20px;
             transform: scale(var(--beat-scale));
-            transition: transform 0.02s ease, box-shadow 0.02s ease;
+            transition: transform 0.01s linear, box-shadow 0.01s linear;
         }
 
         .main-content.active .profile-pic {
-            animation: borderDance 0.3s infinite alternate linear;
+            animation: borderDance 0.15s infinite alternate linear;
         }
 
         @keyframes borderDance {
             0% { border-radius: 50% 50% 50% 50%; }
-            33% { border-radius: 40% 60% 43% 57% / 57% 45% 55% 43%; }
-            66% { border-radius: 58% 42% 54% 46% / 44% 56% 44% 56%; }
-            100% { border-radius: 46% 54% 40% 60% / 53% 47% 53% 47%; }
+            33% { border-radius: 35% 65% 38% 62% / 62% 40% 60% 38%; }
+            66% { border-radius: 65% 35% 60% 40% / 38% 62% 38% 62%; }
+            100% { border-radius: 40% 60% 35% 65% / 60% 40% 60% 40%; }
         }
 
-        /* --- GLOWING TYPEWRITER EFFECT --- */
         .title-container {
             height: 60px;
             display: flex;
@@ -118,10 +117,10 @@
             font-size: 2.5rem;
             font-weight: bold;
             color: #ffffff;
-            text-shadow: 0 0 calc(10px + (var(--beat-glow) / 2)) rgba(255, 51, 51, 0.8), 
-                         0 0 calc(20px + var(--beat-glow)) rgba(255, 51, 51, 0.6);
+            text-shadow: 0 0 calc(20px + var(--beat-glow)) rgba(255, 10, 10, 1), 
+                         0 0 calc(40px + (var(--beat-glow) * 2)) rgba(255, 0, 0, 0.8);
             letter-spacing: 2px;
-            border-right: 3px solid #ff3333;
+            border-right: 3px solid #ff1111;
             white-space: nowrap;
             background: transparent;
             padding-right: 4px;
@@ -130,10 +129,9 @@
 
         @keyframes blink {
             from, to { border-color: transparent }
-            50% { border-color: #ff3333; }
+            50% { border-color: #ff1111; }
         }
 
-        /* --- BUTTONS CONTAINER --- */
         .links-container {
             width: 100%;
             max-width: 500px;
@@ -152,20 +150,21 @@
             color: #ffffff;
             display: flex;
             flex-direction: column;
-            transition: all 0.3s ease;
+            transform: scale(calc(1 + (var(--beat-scale) - 1) * 0.3));
+            transition: all 0.1s ease;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .card-link:hover {
-            transform: translateY(-3px);
-            border-color: #ff3333;
-            box-shadow: 0 6px 20px rgba(255, 51, 51, 0.3);
+            transform: translateY(-3px) scale(1.03);
+            border-color: #ff1111;
+            box-shadow: 0 6px 25px rgba(255, 10, 10, 0.5);
         }
 
         .btn-name {
             font-size: 1.25rem;
             font-weight: bold;
-            color: #ff4d4d;
+            color: #ff3333;
             margin-bottom: 5px;
         }
 
@@ -186,8 +185,8 @@
 
         .counter-label {
             font-size: 1rem;
-            color: #ff3333;
-            text-shadow: 0 0 10px rgba(255, 51, 51, 0.6);
+            color: #ff1111;
+            text-shadow: 0 0 10px rgba(255, 11, 11, 0.6);
             margin-bottom: 10px;
             font-weight: 500;
         }
@@ -238,7 +237,6 @@
     </div>
 
     <script>
-        // --- TYPEWRITER EFFECT ---
         const textArray = ["StripesVR"];
         let textIndex = 0;
         let charIndex = 0;
@@ -270,12 +268,10 @@
             setTimeout(type, nextActionSpeed);
         }
 
-        // --- DYNAMIC AUDIO PIPELINE ---
         let audioCtx, analyser, dataArray, sourceNode;
         let isPlaying = false;
         const audio = document.getElementById('bg-audio');
         
-        // Added unique version parameter to force browser to re-request headers from GitHub CDN
         const songUrl = 'vyralphonk.mp3?v=' + Date.now();
 
         function setupAndPlayAudio() {
@@ -296,7 +292,6 @@
                 sourceNode.connect(analyser);
                 analyser.connect(audioCtx.destination);
 
-                // Safety resume check specifically required for mobile web browsers
                 if (audioCtx.state === 'suspended') {
                     audioCtx.resume();
                 }
@@ -321,25 +316,30 @@
             
             let lowBass = dataArray[1] || 0; 
             let midBass = dataArray[2] || 0;
+            let subBass = dataArray[0] || 0;
             let upperMids = dataArray[4] || 0; 
             
-            let rawAudioValue = Math.max(lowBass, midBass, upperMids);
+            let rawAudioValue = Math.max(subBass, lowBass, midBass, upperMids);
             
-            let sensitivityMultiplier = 1.7; 
+            let sensitivityMultiplier = 2.2; 
             let finalValue = Math.min(255, rawAudioValue * sensitivityMultiplier);
             
-            let glowIntensity = (finalValue / 255) * 85; 
-            let scaleMultiplier = 1 + ((finalValue / 255) * 0.25); 
+            let normalized = finalValue / 255;
+
+            let glowIntensity = normalized * 140; 
+            let scaleMultiplier = 1 + (normalized * 0.45); 
             
-            let redShift = Math.floor(13 + (finalValue / 255) * 70);
-            let colorPulse = `rgb(${redShift}, 13, 17)`;
+            let redShift = Math.floor(10 + (normalized * 180)); 
+            let colorPulse = `rgb(${redShift}, 8, 12)`;
+
+            let flashMix = normalized > 0.65 ? (normalized - 0.65) * 2.5 : 0;
 
             document.documentElement.style.setProperty('--beat-glow', `${glowIntensity}px`);
             document.documentElement.style.setProperty('--beat-scale', scaleMultiplier);
             document.documentElement.style.setProperty('--beat-color-pulse', colorPulse);
+            document.documentElement.style.setProperty('--flash-intensity', `${flashMix}`);
         }
 
-        // --- OVERLAY ENTRY HANDLER ---
         const overlay = document.getElementById('overlay-screen');
         const siteContent = document.getElementById('site-content');
         const enterStatus = document.getElementById('enter-status');
