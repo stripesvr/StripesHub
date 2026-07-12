@@ -168,33 +168,33 @@
             line-height: 1.4;
         }
 
-        /* Verification Locker Box Styling */
+        /* Subscription Required Block Module */
         .sub-locker {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #111116;
+            background: linear-gradient(135deg, #121218 0%, #171724 100%);
             border: 2px solid #ff1111;
             border-radius: 16px;
             padding: 30px;
             text-align: center;
-            z-index: 1000;
-            box-shadow: 0 0 30px rgba(255, 17, 17, 0.4);
-            max-width: 400px;
-            width: 90%;
+            box-shadow: 0 0 35px rgba(255, 17, 17, 0.35);
+            max-width: 440px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 40px;
             display: none;
         }
 
         .sub-locker h3 {
             color: #ffffff;
             margin-top: 0;
-            font-size: 1.5rem;
+            font-size: 1.6rem;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(255, 17, 17, 0.6);
         }
 
         .sub-locker p {
             color: #b0b0bc;
             font-size: 0.95rem;
+            line-height: 1.5;
             margin-bottom: 25px;
         }
 
@@ -202,30 +202,44 @@
             background: #ff1111;
             color: #ffffff;
             border: none;
-            padding: 12px 25px;
+            padding: 14px 20px;
             font-weight: bold;
             font-size: 1rem;
             border-radius: 8px;
             cursor: pointer;
             text-decoration: none;
-            display: inline-block;
-            transition: background 0.2s;
+            display: block;
+            transition: all 0.2s ease;
             margin-bottom: 15px;
             width: 100%;
             box-sizing: border-box;
+            box-shadow: 0 4px 15px rgba(255, 17, 17, 0.2);
         }
 
         .locker-btn:hover {
-            background: #cc0000;
+            background: #e60000;
+            transform: translateY(-1px);
         }
 
         .locker-btn.verify-btn {
-            background: #222230;
-            border: 1px solid #33334d;
+            background: #20202c;
+            border: 1px solid #3d3d5c;
+            color: #e0e0eb;
+            box-shadow: none;
         }
 
         .locker-btn.verify-btn:hover {
-            background: #2a2a3d;
+            background: #272736;
+            border-color: #ff1111;
+        }
+        
+        .error-msg {
+            color: #ff3333;
+            font-size: 0.85rem;
+            margin-top: -5px;
+            margin-bottom: 15px;
+            display: none;
+            font-weight: 500;
         }
     </style>
 </head>
@@ -238,18 +252,19 @@
         <div class="enter-text" id="enter-status">Click to Enter...</div>
     </div>
 
-    <div class="sub-locker" id="subscription-modal">
-        <h3>LOCKED!</h3>
-        <p>You must subscribe to unlock all page downloads. Complete the check step below to reveal the links.</p>
-        <a href="https://youtube.com/@virtualstripes?sub_confirmation=1" target="_blank" class="locker-btn" id="subscribe-action-btn">1. Subscribe Here</a>
-        <button class="locker-btn verify-btn" id="verify-action-btn">2. Verify Status</button>
-    </div>
-
     <div class="main-content" id="site-content">
         <img src="151.png" alt="StripesVR Profile Picture" class="profile-pic">
 
         <div class="title-container">
             <div class="typewriter-text" id="typewriter"></div>
+        </div>
+
+        <div class="sub-locker" id="subscription-modal">
+            <h3>CONTENT LOCKED</h3>
+            <p>Subscribe to our channel to verify authorization status and reveal download links instantly.</p>
+            <a href="https://youtube.com/@virtualstripes?sub_confirmation=1" target="_blank" class="locker-btn" id="subscribe-action-btn">1. Subscribe on YouTube</a>
+            <div class="error-msg" id="locker-error">Please complete step 1 before checking status!</div>
+            <button class="locker-btn verify-btn" id="verify-action-btn">2. Check Verification</button>
         </div>
 
         <div class="links-container" id="menu-links">
@@ -463,47 +478,39 @@
 
         let clickedSubscribe = false;
 
-        function setupSubscriptionGate() {
+        function checkLayoutLock() {
             const container = document.getElementById('menu-links');
             const modal = document.getElementById('subscription-modal');
-            const mainContentElement = document.getElementById('site-content');
             const subBtn = document.getElementById('subscribe-action-btn');
             const verifyBtn = document.getElementById('verify-action-btn');
+            const errorMsg = document.getElementById('locker-error');
 
-            // Track if they've at least clicked the channel link
-            subBtn.addEventListener('click', () => {
-                clickedSubscribe = true;
-            });
+            const hasVisitedBefore = localStorage.getItem('stripes_visited');
 
-            // Handle validation verification
-            verifyBtn.addEventListener('click', () => {
-                if (!clickedSubscribe) {
-                    alert("Please click '1. Subscribe Here' first to complete verification!");
-                } else {
-                    alert("Verification successful! Access granted.");
-                    localStorage.setItem('stripes_visited', 'true');
-                    modal.style.display = 'none';
-                    mainContentElement.style.filter = 'blur(0px)';
-                    mainContentElement.style.pointerEvents = 'auto';
-                }
-            });
+            if (!hasVisitedBefore) {
+                // If it's the first visit, hide the links, reveal the inline block box module
+                container.style.display = 'none';
+                modal.style.display = 'block';
 
-            // Intercept link interactions if user hasn't completed setup yet
-            container.addEventListener('click', function(event) {
-                const card = event.target.closest('.card-link');
-                if (!card) return;
+                subBtn.addEventListener('click', () => {
+                    clickedSubscribe = true;
+                    errorMsg.style.display = 'none';
+                });
 
-                const hasVisitedBefore = localStorage.getItem('stripes_visited');
-
-                if (!hasVisitedBefore) {
-                    event.preventDefault(); // Stop raw tracking file navigation
-                    
-                    // Display verification box, blur background controls
-                    mainContentElement.style.filter = 'blur(20px)';
-                    mainContentElement.style.pointerEvents = 'none';
-                    modal.style.display = 'block';
-                }
-            });
+                verifyBtn.addEventListener('click', () => {
+                    if (!clickedSubscribe) {
+                        errorMsg.style.display = 'block';
+                    } else {
+                        localStorage.setItem('stripes_visited', 'true');
+                        modal.style.display = 'none';
+                        container.style.display = 'flex';
+                    }
+                });
+            } else {
+                // Return users bypass the gate and see the standard menu directly
+                modal.style.display = 'none';
+                container.style.display = 'flex';
+            }
         }
 
         const overlay = document.getElementById('overlay-screen');
@@ -516,7 +523,7 @@
             siteContent.classList.add('active');
 
             setupAndPlayAudio();
-            setupSubscriptionGate();
+            checkLayoutLock();
         });
 
         document.addEventListener("DOMContentLoaded", function() {
