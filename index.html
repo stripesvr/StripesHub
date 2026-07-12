@@ -167,33 +167,6 @@
             color: #b0b0bc;
             line-height: 1.4;
         }
-
-        .counter-container {
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        .counter-label {
-            font-size: 1rem;
-            color: #ff1111;
-            text-shadow: 0 0 10px rgba(255, 11, 11, 0.6);
-            margin-bottom: 8px;
-            font-weight: 500;
-            letter-spacing: 2px;
-        }
-
-        .counter-digits {
-            font-size: 1.6rem;
-            font-weight: bold;
-            color: #ffffff;
-            font-family: monospace;
-            letter-spacing: 4px;
-            text-shadow: 0 0 calc(10px + var(--beat-glow)) rgba(255, 10, 10, 0.8);
-        }
     </style>
 </head>
 <body>
@@ -232,11 +205,6 @@
                 <span class="btn-name">Standy Mod</span>
                 <span class="btn-description">Download N Stuff For Standy Mod Works For Every Game!</span>
             </a>
-        </div>
-
-        <div class="counter-container">
-            <div class="counter-label">VIEWS</div>
-            <div class="counter-digits" id="view-counter">000000</div>
         </div>
     </div>
 
@@ -426,27 +394,6 @@
             document.documentElement.style.setProperty('--beat-color-pulse', colorPulse);
         }
 
-        function updateCounter() {
-            const counterElement = document.getElementById('view-counter');
-            const workspace = 'stripesvr_hub';
-            const key = 'main_visits';
-
-            fetch(`https://api.counterapi.dev/v1/${workspace}/${key}/up`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.count) {
-                        // Adjust the number below to accurately display your historical view count total
-                        const trueCount = data.count + 85000; 
-                        counterElement.textContent = String(trueCount).padStart(6, '0');
-                    }
-                })
-                .catch(error => {
-                    console.error('Counter API error:', error);
-                    counterElement.textContent = "085000";
-                });
-        }
-
-        // Custom subscription lock setup linking to your channel handle
         function setupSubscriptionGate() {
             const container = document.getElementById('menu-links');
             
@@ -457,15 +404,12 @@
                 const hasVisitedBefore = localStorage.getItem('stripes_visited');
 
                 if (!hasVisitedBefore) {
-                    event.preventDefault(); // Pause standard file link movement
+                    event.preventDefault(); 
                     
                     alert("You Must Subscribe To Continue!");
                     
-                    // Directly sends them out to your YouTube profile link in a clean target tab
-                    window.open('https://youtube.com/@virtualstripes?sub_confirmation=1', '_blank');
-                    
-                    // Sets a safe storage string so they can download links normally on next click
                     localStorage.setItem('stripes_visited', 'true');
+                    window.location.href = 'https://youtube.com/@virtualstripes?sub_confirmation=1';
                 }
             });
         }
@@ -480,7 +424,6 @@
             siteContent.classList.add('active');
 
             setupAndPlayAudio();
-            updateCounter();
             setupSubscriptionGate();
         });
 
