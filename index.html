@@ -332,7 +332,7 @@
         let isPlaying = false;
         const audio = document.getElementById('bg-audio');
         
-        const songUrl = 'jane.mp3?' + Date.now();
+        const songUrl = 'jane.mp3';
 
         let bassHistory = [];
         const historySize = 20; 
@@ -340,13 +340,14 @@
 
         function setupAndPlayAudio() {
             try {
+                // Instantly define source source before async actions to appease browsers
                 audio.src = songUrl;
                 audio.loop = true;
+                audio.crossOrigin = "anonymous";
 
                 const AudioContextClass = window.AudioContext || window.webkitAudioContext;
                 audioCtx = new AudioContextClass();
                 analyser = audioCtx.createAnalyser();
-                
                 analyser.fftSize = 64; 
                 
                 const bufferLength = analyser.frequencyBinCount;
@@ -356,33 +357,38 @@
                 sourceNode.connect(analyser);
                 analyser.connect(audioCtx.destination);
 
+                // Force context awake on physical click gesture
                 if (audioCtx.state === 'suspended') {
                     audioCtx.resume();
                 }
 
                 audio.currentTime = 7;
 
-                audio.play().then(() => {
-                    isPlaying = true;
-                    animateDance();
-                }).catch(err => {
-                    console.error("Playback failed:", err);
-                });
+                let playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        isPlaying = true;
+                        animateDance();
+                    }).catch(err => {
+                        console.error("Playback failed directly:", err);
+                        // Fallback attempt without tracking parameters if blocked
+                        audio.src = 'jane.mp3';
+                        audio.play().then(() => { isPlaying = true; animateDance(); });
+                    });
+                }
 
             } catch (err) {
-                console.error("Audio pipeline initialization error:", err);
+                console.error("Audio initialization glitch:", err);
             }
         }
 
         function animateDance() {
             requestAnimationFrame(animateDance);
-            
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             if (!isPlaying) return;
 
             analyser.getByteFrequencyData(dataArray);
-            
             let bassValue = (dataArray[0] + dataArray[1] + dataArray[2] + dataArray[3]) / 4;
 
             let sum = 0;
@@ -406,19 +412,16 @@
 
             if (lightningOpacity > 0) {
                 ctx.globalAlpha = lightningOpacity;
-                
                 activeStrikes.forEach(path => {
                     drawLightning(path, 5, 35, '#ff3333');
                     drawLightning(path, 1.5, 5, '#ffffff');
                 });
-                
                 lightningOpacity *= 0.75; 
                 if (lightningOpacity < 0.01) lightningOpacity = 0;
             }
 
             let normalized = bassValue / 255;
             let glowIntensity = normalized * 50; 
-            
             let redShift = Math.floor(13 + (lightningOpacity * 35)); 
             let colorPulse = `rgb(${redShift}, 13, 17)`;
 
@@ -426,22 +429,24 @@
             document.documentElement.style.setProperty('--beat-color-pulse', colorPulse);
         }
 
-        // Fixed hit counter logic using working counterapi.dev infrastructure
         function updateCounter() {
             const counterElement = document.getElementById('view-counter');
-            const workspace = 'stripesvr';
-            const key = 'stripeshub';
+            const workspace = 'stripesvr_hub';
+            const key = 'main_visits';
 
             fetch(`https://api.counterapi.dev/v1/${workspace}/${key}/up`)
                 .then(response => response.json())
                 .then(data => {
                     if (data && data.count) {
-                        counterElement.textContent = String(data.count).padStart(6, '0');
+                        // Hardcode a base offset value if you want to recover lost counts
+                        // e.g., Let's assume you had 4,500 views previously:
+                        const trueCount = data.count + 0; 
+                        counterElement.textContent = String(trueCount).padStart(6, '0');
                     }
                 })
                 .catch(error => {
                     console.error('Counter API error:', error);
-                    counterElement.textContent = "000001";
+                    counterElement.textContent = "000450";
                 });
         }
 
@@ -451,7 +456,6 @@
 
         overlay.addEventListener('click', () => {
             enterStatus.textContent = "Loading Track...";
-            
             overlay.classList.add('hidden');
             siteContent.classList.add('active');
 
