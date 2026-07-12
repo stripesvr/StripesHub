@@ -181,8 +181,18 @@
             font-size: 1rem;
             color: #ff1111;
             text-shadow: 0 0 10px rgba(255, 11, 11, 0.6);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: 500;
+            letter-spacing: 2px;
+        }
+
+        .counter-digits {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #ffffff;
+            font-family: monospace;
+            letter-spacing: 4px;
+            text-shadow: 0 0 calc(10px + var(--beat-glow)) rgba(255, 10, 10, 0.8);
         }
     </style>
 </head>
@@ -222,18 +232,11 @@
                 <span class="btn-name">Standy Mod</span>
                 <span class="btn-description">Download N Stuff For Standy Mod Works For Every Game!</span>
             </a>
-            
         </div>
 
         <div class="counter-container">
-            <div class="counter-label"></div>
-            <iframe src="https://404city.neocities" 
-                    width="0" 
-                    height="0" 
-                    frameborder="0" 
-                    scrolling="no" 
-                    style="display: none">
-            </iframe>
+            <div class="counter-label">VIEWS</div>
+            <div class="counter-digits" id="view-counter">000000</div>
         </div>
     </div>
 
@@ -396,7 +399,6 @@
             let currentTime = Date.now();
             let timeSinceLastStrike = currentTime - lastStrikeTime;
 
-            // Natural audio threshold trigger OR fallback trigger if volume stays maxed out for too long
             if ((bassValue > bassAverage * 1.04 && timeSinceLastStrike > 180) || (bassValue >= 240 && timeSinceLastStrike > 320)) {
                 triggerLightningStrike();
                 lastStrikeTime = currentTime;
@@ -424,6 +426,26 @@
             document.documentElement.style.setProperty('--beat-color-pulse', colorPulse);
         }
 
+        // Live CountAPI implementation using your Github handle/repo
+        function updateCounter() {
+            const counterElement = document.getElementById('view-counter');
+            const namespace = 'stripesvr';
+            const key = 'stripeshub';
+
+            fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.value) {
+                        counterElement.textContent = String(data.value).padStart(6, '0');
+                    }
+                })
+                .catch(error => {
+                    console.error('Counter API error:', error);
+                    // Standard fallback display if third-party server drops or limits requests
+                    counterElement.textContent = "ONLINE";
+                });
+        }
+
         const overlay = document.getElementById('overlay-screen');
         const siteContent = document.getElementById('site-content');
         const enterStatus = document.getElementById('enter-status');
@@ -435,6 +457,7 @@
             siteContent.classList.add('active');
 
             setupAndPlayAudio();
+            updateCounter();
         });
 
         document.addEventListener("DOMContentLoaded", function() {
