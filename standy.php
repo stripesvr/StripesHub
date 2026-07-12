@@ -1,3 +1,4 @@
+<?php require_once 'logger.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -113,7 +114,6 @@
 
     <script>
         // --- EDIT YOUR TITLE HERE ---
-        // Change "Untitled" to whatever you want. You can add more phrases separated by commas.
         const textArray = ["Standy Mods"]; 
         
         let textIndex = 0;
@@ -142,7 +142,7 @@
                 isDeleting = true;
             } else if (isDeleting && charIndex === 0) {
                 isDeleting = false;
-                textIndex = (textIndex + 1) % textArray.length; // Moves to next text if you add more
+                textIndex = (textIndex + 1) % textArray.length;
                 nextActionSpeed = 500; 
             }
 
