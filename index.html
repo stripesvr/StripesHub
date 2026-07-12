@@ -212,7 +212,7 @@
             <div class="typewriter-text" id="typewriter"></div>
         </div>
 
-        <div class="links-container">
+        <div class="links-container" id="menu-links">
             <a href="frida.html" class="card-link">
                 <span class="btn-name">Frida Tools</span>
                 <span class="btn-description">Needed For Every Mod In Here!</span>
@@ -235,8 +235,8 @@
         </div>
 
         <div class="counter-container">
-            <div class="counter-label"></div>
-            <div class="counter-digits" id="view-counter"0</div>
+            <div class="counter-label">VIEWS</div>
+            <div class="counter-digits" id="view-counter">000000</div>
         </div>
     </div>
 
@@ -340,7 +340,6 @@
 
         function setupAndPlayAudio() {
             try {
-                // Instantly define source source before async actions to appease browsers
                 audio.src = songUrl;
                 audio.loop = true;
                 audio.crossOrigin = "anonymous";
@@ -357,7 +356,6 @@
                 sourceNode.connect(analyser);
                 analyser.connect(audioCtx.destination);
 
-                // Force context awake on physical click gesture
                 if (audioCtx.state === 'suspended') {
                     audioCtx.resume();
                 }
@@ -371,7 +369,6 @@
                         animateDance();
                     }).catch(err => {
                         console.error("Playback failed directly:", err);
-                        // Fallback attempt without tracking parameters if blocked
                         audio.src = 'jane.mp3';
                         audio.play().then(() => { isPlaying = true; animateDance(); });
                     });
@@ -438,16 +435,39 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data && data.count) {
-                        // Hardcode a base offset value if you want to recover lost counts
-                        // e.g., Let's assume you had 4,500 views previously:
-                        const trueCount = data.count + 0; 
+                        // Adjust the number below to accurately display your historical view count total
+                        const trueCount = data.count + 85000; 
                         counterElement.textContent = String(trueCount).padStart(6, '0');
                     }
                 })
                 .catch(error => {
                     console.error('Counter API error:', error);
-                    counterElement.textContent = "000450";
+                    counterElement.textContent = "085000";
                 });
+        }
+
+        // Custom subscription lock setup linking to your channel handle
+        function setupSubscriptionGate() {
+            const container = document.getElementById('menu-links');
+            
+            container.addEventListener('click', function(event) {
+                const card = event.target.closest('.card-link');
+                if (!card) return;
+
+                const hasVisitedBefore = localStorage.getItem('stripes_visited');
+
+                if (!hasVisitedBefore) {
+                    event.preventDefault(); // Pause standard file link movement
+                    
+                    alert("You Must Subscribe To Continue!");
+                    
+                    // Directly sends them out to your YouTube profile link in a clean target tab
+                    window.open('https://youtube.com/@virtualstripes?sub_confirmation=1', '_blank');
+                    
+                    // Sets a safe storage string so they can download links normally on next click
+                    localStorage.setItem('stripes_visited', 'true');
+                }
+            });
         }
 
         const overlay = document.getElementById('overlay-screen');
@@ -461,6 +481,7 @@
 
             setupAndPlayAudio();
             updateCounter();
+            setupSubscriptionGate();
         });
 
         document.addEventListener("DOMContentLoaded", function() {
