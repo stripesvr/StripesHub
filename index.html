@@ -167,6 +167,66 @@
             color: #b0b0bc;
             line-height: 1.4;
         }
+
+        /* Verification Locker Box Styling */
+        .sub-locker {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #111116;
+            border: 2px solid #ff1111;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 0 30px rgba(255, 17, 17, 0.4);
+            max-width: 400px;
+            width: 90%;
+            display: none;
+        }
+
+        .sub-locker h3 {
+            color: #ffffff;
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
+
+        .sub-locker p {
+            color: #b0b0bc;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+
+        .locker-btn {
+            background: #ff1111;
+            color: #ffffff;
+            border: none;
+            padding: 12px 25px;
+            font-weight: bold;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.2s;
+            margin-bottom: 15px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .locker-btn:hover {
+            background: #cc0000;
+        }
+
+        .locker-btn.verify-btn {
+            background: #222230;
+            border: 1px solid #33334d;
+        }
+
+        .locker-btn.verify-btn:hover {
+            background: #2a2a3d;
+        }
     </style>
 </head>
 <body>
@@ -176,6 +236,13 @@
 
     <div class="enter-overlay" id="overlay-screen">
         <div class="enter-text" id="enter-status">Click to Enter...</div>
+    </div>
+
+    <div class="sub-locker" id="subscription-modal">
+        <h3>LOCKED!</h3>
+        <p>You must subscribe to unlock all page downloads. Complete the check step below to reveal the links.</p>
+        <a href="https://youtube.com/@virtualstripes?sub_confirmation=1" target="_blank" class="locker-btn" id="subscribe-action-btn">1. Subscribe Here</a>
+        <button class="locker-btn verify-btn" id="verify-action-btn">2. Verify Status</button>
     </div>
 
     <div class="main-content" id="site-content">
@@ -394,9 +461,34 @@
             document.documentElement.style.setProperty('--beat-color-pulse', colorPulse);
         }
 
+        let clickedSubscribe = false;
+
         function setupSubscriptionGate() {
             const container = document.getElementById('menu-links');
-            
+            const modal = document.getElementById('subscription-modal');
+            const mainContentElement = document.getElementById('site-content');
+            const subBtn = document.getElementById('subscribe-action-btn');
+            const verifyBtn = document.getElementById('verify-action-btn');
+
+            // Track if they've at least clicked the channel link
+            subBtn.addEventListener('click', () => {
+                clickedSubscribe = true;
+            });
+
+            // Handle validation verification
+            verifyBtn.addEventListener('click', () => {
+                if (!clickedSubscribe) {
+                    alert("Please click '1. Subscribe Here' first to complete verification!");
+                } else {
+                    alert("Verification successful! Access granted.");
+                    localStorage.setItem('stripes_visited', 'true');
+                    modal.style.display = 'none';
+                    mainContentElement.style.filter = 'blur(0px)';
+                    mainContentElement.style.pointerEvents = 'auto';
+                }
+            });
+
+            // Intercept link interactions if user hasn't completed setup yet
             container.addEventListener('click', function(event) {
                 const card = event.target.closest('.card-link');
                 if (!card) return;
@@ -404,12 +496,12 @@
                 const hasVisitedBefore = localStorage.getItem('stripes_visited');
 
                 if (!hasVisitedBefore) {
-                    event.preventDefault(); 
+                    event.preventDefault(); // Stop raw tracking file navigation
                     
-                    alert("You Must Subscribe To Continue!");
-                    
-                    localStorage.setItem('stripes_visited', 'true');
-                    window.location.href = 'https://youtube.com/@virtualstripes?sub_confirmation=1';
+                    // Display verification box, blur background controls
+                    mainContentElement.style.filter = 'blur(20px)';
+                    mainContentElement.style.pointerEvents = 'none';
+                    modal.style.display = 'block';
                 }
             });
         }
