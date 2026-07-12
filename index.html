@@ -426,23 +426,22 @@
             document.documentElement.style.setProperty('--beat-color-pulse', colorPulse);
         }
 
-        // Live CountAPI implementation using your Github handle/repo
+        // Fixed hit counter logic using working counterapi.dev infrastructure
         function updateCounter() {
             const counterElement = document.getElementById('view-counter');
-            const namespace = 'stripesvr';
+            const workspace = 'stripesvr';
             const key = 'stripeshub';
 
-            fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+            fetch(`https://api.counterapi.dev/v1/${workspace}/${key}/up`)
                 .then(response => response.json())
                 .then(data => {
-                    if (data && data.value) {
-                        counterElement.textContent = String(data.value).padStart(6, '0');
+                    if (data && data.count) {
+                        counterElement.textContent = String(data.count).padStart(6, '0');
                     }
                 })
                 .catch(error => {
                     console.error('Counter API error:', error);
-                    // Standard fallback display if third-party server drops or limits requests
-                    counterElement.textContent = "ONLINE";
+                    counterElement.textContent = "000001";
                 });
         }
 
