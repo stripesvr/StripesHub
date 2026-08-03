@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>?????????</title>
+    <title>?????</title>
     <style>
         /* --- GLOBAL STYLES --- */
         body {
@@ -16,10 +16,47 @@
             justify-content: flex-start;
             min-height: 100vh;
             margin: 0;
-            padding: 60px 20px 80px 20px; /* Added extra bottom padding for the home button */
+            padding: 60px 20px 80px 20px;
             box-sizing: border-box;
             position: relative;
+            overflow-x: hidden;
         }
+
+        /* --- CAUTION TAPE OVERLAYS --- */
+        .caution-tape {
+            position: absolute;
+            width: 160vw;
+            height: 45px;
+            background: repeating-linear-gradient(
+                -45deg,
+                #f1c40f,
+                #f1c40f 25px,
+                #111111 25px,
+                #111111 50px
+            );
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            font-weight: 900;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            color: #111111;
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .caution-tape span {
+            background-color: #f1c40f;
+            padding: 0 10px;
+        }
+
+        /* Multiple Angled Tapes */
+        .tape-1 { transform: rotate(-15deg) translateY(100px); }
+        .tape-2 { transform: rotate(10deg) translateY(320px); }
+        .tape-3 { transform: rotate(-8deg) translateY(480px); }
+        .tape-4 { transform: rotate(22deg) translateY(200px); }
 
         /* --- GLOWING TYPEWRITER EFFECT --- */
         .title-container {
@@ -28,6 +65,7 @@
             align-items: center;
             justify-content: center;
             margin-bottom: 50px;
+            z-index: 1;
         }
 
         .typewriter-text {
@@ -42,6 +80,7 @@
             background: transparent;
             padding-right: 4px;
             animation: blink 0.75s step-end infinite;
+            font-family: monospace; /* Gives a technical glitch/mystery vibe */
         }
 
         @keyframes blink {
@@ -56,7 +95,8 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
-            margin-bottom: 40px; /* Space between links and home button */
+            margin-bottom: 40px;
+            z-index: 1;
         }
 
         /* --- EDITABLE BUTTON STYLES --- */
@@ -106,7 +146,8 @@
             text-transform: uppercase;
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            margin-top: auto; /* Pushes to bottom if content is short */
+            margin-top: auto;
+            z-index: 1;
         }
 
         .home-btn:hover {
@@ -118,20 +159,33 @@
 </head>
 <body>
 
+    <div class="caution-tape tape-1">
+        <span>UNRELEASED</span> • <span>UNRELEASED</span> • <span>UNRELEASED</span> • <span>UNRELEASED</span>
+    </div>
+    <div class="caution-tape tape-2">
+        <span>UNRELEASED</span> • <span>UNRELEASED</span> • <span>UNRELEASED</span> • <span>UNRELEASED</span>
+    </div>
+    <div class="caution-tape tape-3">
+        <span>UNRELEASED</span> • <span>UNRELEASED</span> • <span>UNRELEASED</span> • <span>UNRELEASED</span>
+    </div>
+    <div class="caution-tape tape-4">
+        <span>UNRELEASED</span> • <span>UNRELEASED</span> • <span>UNRELEASED</span> • <span>UNRELEASED</span>
+    </div>
+
     <div class="title-container">
         <div class="typewriter-text" id="typewriter"></div>
     </div>
 
     <div class="links-container">
 
-        <a href="N5 menu fix.zip" download class="card-link">
-            <span class="btn-name">N5 Menu</span>
-            <span class="btn-description">N5 Menu Download (Free Version)</span>
+        <a href="#" class="card-link">
+            <span class="btn-name">?????</span>
+            <span class="btn-description">?????</span>
         </a>
 
-        <a href="https://discord.gg/n5mh" target="_blank" class="card-link">
-            <span class="btn-name">N5 Discord Server</span>
-            <span class="btn-description">Join The Server For Modding Updates And Paid Menu Version!</span>
+        <a href="#" class="card-link">
+            <span class="btn-name">?????</span>
+            <span class="btn-description">?????</span>
         </a>
 
     </div>
@@ -139,40 +193,45 @@
     <a href="https://stripesvr.github.io/StripesHub" class="home-btn">Home</a>
 
     <script>
-        // --- EDIT YOUR TITLE HERE ---
-        const textArray = ["???????"]; 
+        // Set of strange, shifting characters
+        const weirdChars = '¥§¶#$@%&*!?ØΞΨΩΔ░▒▓█<>/\\|?=+-';
+        const targetWords = ["█▒░?????░▒█", "§Ψ#UNRELEASED#Ψ§", "Ø?Ø?Ø?Ø?Ø?Ø"];
         
-        let textIndex = 0;
+        let wordIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
-        const typeSpeed = 150;  
-        const eraseSpeed = 100; 
-        const delayBetween = 2500; 
         const typewriterElement = document.getElementById("typewriter");
 
+        function getRandomChar() {
+            return weirdChars[Math.floor(Math.random() * weirdChars.length)];
+        }
+
         function type() {
-            const currentText = textArray[textIndex];
+            const currentWord = targetWords[wordIndex];
             
             if (isDeleting) {
-                typewriterElement.textContent = currentText.substring(0, charIndex - 1);
+                typewriterElement.textContent = currentWord.substring(0, charIndex - 1);
                 charIndex--;
             } else {
-                typewriterElement.textContent = currentText.substring(0, charIndex + 1);
+                // Adds a random flickering glitch character at the typing head
+                const typedPart = currentWord.substring(0, charIndex);
+                const glitchTail = charIndex < currentWord.length ? getRandomChar() : '';
+                typewriterElement.textContent = typedPart + glitchTail;
                 charIndex++;
             }
 
-            let nextActionSpeed = isDeleting ? eraseSpeed : typeSpeed;
+            let nextSpeed = isDeleting ? 70 : 120;
 
-            if (!isDeleting && charIndex === currentText.length) {
-                nextActionSpeed = delayBetween; 
+            if (!isDeleting && charIndex > currentWord.length) {
+                nextSpeed = 2000; // Pause at full word
                 isDeleting = true;
             } else if (isDeleting && charIndex === 0) {
                 isDeleting = false;
-                textIndex = (textIndex + 1) % textArray.length; 
-                nextActionSpeed = 500; 
+                wordIndex = (wordIndex + 1) % targetWords.length; 
+                nextSpeed = 400; 
             }
 
-            setTimeout(type, nextActionSpeed);
+            setTimeout(type, nextSpeed);
         }
 
         document.addEventListener("DOMContentLoaded", function() {
