@@ -403,7 +403,7 @@
         let isPlaying = false;
         const audio = document.getElementById('bg-audio');
         
-        const songUrl = 'jane.mp3';
+        const songUrl = 'song.mp3';
 
         let bassHistory = [];
         const historySize = 20; 
@@ -440,7 +440,7 @@
                         animateDance();
                     }).catch(err => {
                         console.error("Playback failed directly:", err);
-                        audio.src = 'jane.mp3';
+                        audio.src = 'song.mp3';
                         audio.play().then(() => { isPlaying = true; animateDance(); });
                     });
                 }
