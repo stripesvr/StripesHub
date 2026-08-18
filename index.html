@@ -232,7 +232,7 @@
             background: #272736;
             border-color: #ff1111;
         }
-        
+
         .error-msg {
             color: #ff3333;
             font-size: 0.85rem;
@@ -272,7 +272,7 @@
                 <span class="btn-name">Frida Tools</span>
                 <span class="btn-description">Needed For Every Mod In Here!</span>
             </a>
-        
+
             <a href="https://discord.gg/XnFxrkuKM5" class="card-link">
                 <span class="btn-name">EIC Modding</span>
                 <span class="btn-description">standalone no PC animal company mod</span>
@@ -307,11 +307,17 @@
                 <span class="btn-name">Delta</span>
                 <span class="btn-description">delta new adb</span>
             </a>
-            
         </div>
     </div>
 
     <script>
+        // ==========================================
+        // CONFIGURATION OPTIONS
+        // ==========================================
+        // Change song volume here (0.0 = Mute, 0.5 = 50% volume, 1.0 = 100% full volume)
+        const DEFAULT_VOLUME = 0.1; 
+        // ==========================================
+
         const textArray = ["StripesVR"];
         let textIndex = 0;
         let charIndex = 0;
@@ -414,6 +420,7 @@
                 audio.src = songUrl;
                 audio.loop = true;
                 audio.crossOrigin = "anonymous";
+                audio.volume = DEFAULT_VOLUME; // Set background audio volume here
 
                 const AudioContextClass = window.AudioContext || window.webkitAudioContext;
                 audioCtx = new AudioContextClass();
@@ -441,6 +448,7 @@
                     }).catch(err => {
                         console.error("Playback failed directly:", err);
                         audio.src = 'song.mp3';
+                        audio.volume = DEFAULT_VOLUME;
                         audio.play().then(() => { isPlaying = true; animateDance(); });
                     });
                 }
@@ -509,7 +517,6 @@
             const hasVisitedBefore = localStorage.getItem('stripes_visited');
 
             if (!hasVisitedBefore) {
-                // If it's the first visit, hide the links, reveal the inline block box module
                 container.style.display = 'none';
                 modal.style.display = 'block';
 
@@ -528,7 +535,6 @@
                     }
                 });
             } else {
-                // Return users bypass the gate and see the standard menu directly
                 modal.style.display = 'none';
                 container.style.display = 'flex';
             }
