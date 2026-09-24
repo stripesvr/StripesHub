@@ -54,11 +54,11 @@
             max-width: 500px;
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            gap: 20px;
             margin-bottom: 40px;
         }
 
-        /* --- UNIFIED MOD CARD STYLES --- */
+        /* --- MOD CARD STYLES --- */
         .mod-card {
             background: linear-gradient(135deg, #16161f 0%, #1f1f2e 100%);
             border: 1px solid #33334d;
@@ -78,8 +78,15 @@
             transform: translateY(-2px);
         }
 
-        .card-header {
-            text-decoration: none;
+        /* --- TOP SECTION (Title, Description, and Download Button) --- */
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .card-info {
             display: flex;
             flex-direction: column;
         }
@@ -88,7 +95,7 @@
             font-size: 1.25rem;
             font-weight: bold;
             color: #ff4d4d;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
         .btn-description {
@@ -97,7 +104,43 @@
             line-height: 1.4;
         }
 
-        /* --- CODE / ACTION ROW --- */
+        /* --- DOWNLOAD BUTTON STYLE --- */
+        .download-btn {
+            background: #242438;
+            border: 1px solid #33334d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 42px;
+            height: 42px;
+            box-sizing: border-box;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .download-btn:hover {
+            background: #ff3333;
+            border-color: #ff4d4d;
+        }
+
+        .download-icon {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+            filter: invert(1); 
+            transition: filter 0.2s ease;
+            pointer-events: none;
+        }
+
+        .download-btn:hover .download-icon {
+            filter: invert(0); 
+        }
+
+        /* --- CODE CARD / ROW STYLES --- */
         .code-row {
             display: flex;
             align-items: center;
@@ -111,7 +154,7 @@
 
         .code-text {
             font-family: 'Consolas', 'Courier New', Courier, monospace;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: bold;
             color: #ff4d4d;
             word-break: break-all;
@@ -185,21 +228,31 @@
 
         <!-- Standalone Root APK -->
         <div class="mod-card">
-            <a href="https://github.com/Lumince/singularity/releases" download class="card-header">
-                <span class="btn-name">Singularity</span>
-                <span class="btn-description">Standalone Root Latest APK</span>
-            </a>
+            <div class="card-top">
+                <div class="card-info">
+                    <span class="btn-name">Singularity</span>
+                    <span class="btn-description">Standalone Root Latest APK</span>
+                </div>
+                <a href="https://github.com/Lumince/singularity/releases" download class="download-btn" title="Download Singularity APK">
+                    <svg class="download-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </a>
+            </div>
         </div>
 
         <!-- Big Scary Menu -->
         <div class="mod-card">
-            <a href="StripedClientBS.zip" download class="card-header">
-                <span class="btn-name">Big Scary Menu</span>
-                <span class="btn-description">JokerClient Menu Ported To Standalone</span>
-            </a>
+            <div class="card-top">
+                <div class="card-info">
+                    <span class="btn-name">Big Scary Menu</span>
+                    <span class="btn-description">JokerClient Menu Ported To Standalone</span>
+                </div>
+                <a href="StripedClientBS.zip" download class="download-btn" title="Download Zip File">
+                    <svg class="download-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </a>
+            </div>
             <div class="code-row">
                 <span class="code-text">su -c "sh '/storage/emulated/0/Download/BigScary-JaSC-Android/run-android.sh'"</span>
-                <button class="copy-btn" onclick="downloadAndCopy('StripedClientBS.zip', this)" title="Download Zip & Copy Command">
+                <button class="copy-btn" onclick="copyCommand(this)" title="Copy Command">
                     <img src="176.png" alt="Copy Icon" class="copy-icon">
                 </button>
             </div>
@@ -207,13 +260,18 @@
 
         <!-- BwahVR Menu -->
         <div class="mod-card">
-            <a href="StripedClientBwah.zip" download class="card-header">
-                <span class="btn-name">BwahVR Menu</span>
-                <span class="btn-description">Menu For Bwah, Run While In Garden</span>
-            </a>
+            <div class="card-top">
+                <div class="card-info">
+                    <span class="btn-name">BwahVR Menu</span>
+                    <span class="btn-description">Menu For Bwah, Run While In Garden</span>
+                </div>
+                <a href="StripedClientBwah.zip" download class="download-btn" title="Download Zip File">
+                    <svg class="download-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </a>
+            </div>
             <div class="code-row">
                 <span class="code-text">su -c "sh '/storage/emulated/0/Download/Bwah-Android/run-android.sh'"</span>
-                <button class="copy-btn" onclick="downloadAndCopy('StripedClientBwah.zip', this)" title="Download Zip & Copy Command">
+                <button class="copy-btn" onclick="copyCommand(this)" title="Copy Command">
                     <img src="176.png" alt="Copy Icon" class="copy-icon">
                 </button>
             </div>
@@ -221,13 +279,18 @@
 
         <!-- Animal Rivals Mod Menu -->
         <div class="mod-card">
-            <a href="https://github.com/stripesvr/StripesHub/releases/download/ar/AnimalRivals-Android.zip" download class="card-header">
-                <span class="btn-name">Animal Rivals Mod Menu</span>
-                <span class="btn-description">Menu For Animal Rivals, Ported To Singularity By Me</span>
-            </a>
+            <div class="card-top">
+                <div class="card-info">
+                    <span class="btn-name">Animal Rivals Mod Menu</span>
+                    <span class="btn-description">Menu For Animal Rivals, Ported To Singularity By Me</span>
+                </div>
+                <a href="https://github.com/stripesvr/StripesHub/releases/download/ar/AnimalRivals-Android.zip" download class="download-btn" title="Download Zip File">
+                    <svg class="download-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </a>
+            </div>
             <div class="code-row">
                 <span class="code-text">su -c "sh '/storage/emulated/0/Download/AnimalRivals-Android/run-android.sh'"</span>
-                <button class="copy-btn" onclick="downloadAndCopy('https://github.com/stripesvr/StripesHub/releases/download/ar/AnimalRivals-Android.zip', this)" title="Download Zip & Copy Command">
+                <button class="copy-btn" onclick="copyCommand(this)" title="Copy Command">
                     <img src="176.png" alt="Copy Icon" class="copy-icon">
                 </button>
             </div>
@@ -273,17 +336,8 @@
             setTimeout(type, nextActionSpeed);
         }
 
-        // --- DOWNLOAD & CLIPBOARD COMBINED ACTION ---
-        function downloadAndCopy(fileUrl, buttonElement) {
-            // 1. Trigger the download automatically via a temporary anchor element
-            const hiddenAnchor = document.createElement('a');
-            hiddenAnchor.href = fileUrl;
-            hiddenAnchor.download = '';
-            document.body.appendChild(hiddenAnchor);
-            hiddenAnchor.click();
-            document.body.removeChild(hiddenAnchor);
-
-            // 2. Copy the command text to clipboard
+        // --- CLIPBOARD ACTION ENGINE ---
+        function copyCommand(buttonElement) {
             const codeRow = buttonElement.closest('.code-row');
             const commandText = codeRow.querySelector('.code-text').innerText;
             
@@ -291,9 +345,9 @@
                 codeRow.style.borderColor = '#00ff66';
                 setTimeout(() => {
                     codeRow.style.borderColor = '';
-                }, 600);
+                }, 500);
             }).catch(err => {
-                console.error("Failed to copy command entry:", err);
+                console.error("Execution failed to complete clipboard entry:", err);
             });
         }
 
