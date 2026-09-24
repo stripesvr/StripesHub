@@ -120,6 +120,7 @@
             box-sizing: border-box;
             text-decoration: none;
             flex-shrink: 0;
+            color: #ffffff; /* Forces the SVG stroke to inherit pure white */
         }
 
         .download-btn:hover {
@@ -131,13 +132,7 @@
             width: 20px;
             height: 20px;
             object-fit: contain;
-            filter: invert(1); 
-            transition: filter 0.2s ease;
             pointer-events: none;
-        }
-
-        .download-btn:hover .download-icon {
-            filter: invert(0); 
         }
 
         /* --- CODE CARD / ROW STYLES --- */
