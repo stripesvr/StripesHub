@@ -131,6 +131,7 @@
             width: 40px;
             height: 40px;
             box-sizing: border-box;
+            flex-shrink: 0;
         }
 
         .copy-btn:hover {
@@ -144,6 +145,7 @@
             object-fit: contain;
             filter: invert(1); 
             transition: filter 0.2s ease;
+            pointer-events: none; /* Ensures click targets the button */
         }
 
         .copy-btn:hover .copy-icon {
@@ -182,32 +184,31 @@
 
     <div class="links-container">
 
-        <a href="https://github.com/Lumince/singularity/releases" download="" class="card-link">
+        <a href="https://github.com/Lumince/singularity/releases" download class="card-link">
             <span class="btn-name">Singularity</span>
             <span class="btn-description">Standalone Root Latest APK</span>
         </a>
 
-      <a href="StripedClientBS.zip" download="" class="card-link">
+        <a href="StripedClientBS.zip" download class="card-link">
             <span class="btn-name">Big Scary Menu</span>
             <span class="btn-description">JokerClient Menu Ported To Standalone</span>
         </a>
 
-      <div class="code-card">
-            <span class="code-text" id="command-text">su -c "sh '/storage/emulated/0/Download/StripedClientBS/run-android.sh'"</span>
-            <button class="copy-btn" id="copy-button" onclick="copyCommand()" title="Copy to clipboard">
+        <div class="code-card">
+            <span class="code-text">su -c "sh '/storage/emulated/0/Download/StripedClientBS/run-android.sh'"</span>
+            <button class="copy-btn" onclick="copyCommand(this)" title="Copy to clipboard">
                 <img src="176.png" alt="Copy Icon" class="copy-icon">
             </button>
         </div>
 
-
-      <a href="StripedClientBwah.zip" download="" class="card-link">
+        <a href="StripedClientBwah.zip" download class="card-link">
             <span class="btn-name">BwahVR Menu</span>
             <span class="btn-description">Menu For Bwah, Run While In Garden</span>
         </a>
 
-      <div class="code-card">
-            <span class="code-text" id="command-text">su -c "sh '/storage/emulated/0/Download/StripedClientBwah/run-android.sh'"</span>
-            <button class="copy-btn" id="copy-button" onclick="copyCommand()" title="Copy to clipboard">
+        <div class="code-card">
+            <span class="code-text">su -c "sh '/storage/emulated/0/Download/StripedClientBwah/run-android.sh'"</span>
+            <button class="copy-btn" onclick="copyCommand(this)" title="Copy to clipboard">
                 <img src="176.png" alt="Copy Icon" class="copy-icon">
             </button>
         </div>
@@ -254,9 +255,18 @@
         }
 
         // --- CLIPBOARD ACTION ENGINE ---
-        function copyCommand() {
-            const commandText = document.getElementById("command-text").innerText;
-            navigator.clipboard.writeText(commandText).catch(err => {
+        function copyCommand(buttonElement) {
+            // Find the sibling .code-text element inside the same .code-card container
+            const codeCard = buttonElement.closest('.code-card');
+            const commandText = codeCard.querySelector('.code-text').innerText;
+            
+            navigator.clipboard.writeText(commandText).then(() => {
+                // Optional visual feedback (e.g., temporary border color change)
+                codeCard.style.borderColor = '#00ff66';
+                setTimeout(() => {
+                    codeCard.style.borderColor = '';
+                }, 500);
+            }).catch(err => {
                 console.error("Execution failed to complete clipboard entry:", err);
             });
         }
