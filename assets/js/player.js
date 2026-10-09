@@ -4,7 +4,7 @@
 (function () {
   "use strict";
 
-  var SONG = "song.mp3";
+  var SONG = "assets/audio/song.mp3";
   var VOLUME = 0.05;      // background volume, 0.0 to 1.0
   var START_AT = 7;       // seconds to skip into the track on a fresh start
   var STORE = "stripes_music";
