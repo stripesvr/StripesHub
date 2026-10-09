@@ -4,12 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#07070a">
+    <meta name="description" content="Downloads, tools and links from stripes.lol">
+    <meta property="og:title" content="stripes.lol">
+    <meta property="og:description" content="Downloads, tools and links from stripes.lol">
+    <meta property="og:image" content="https://stripes.lol/151.png">
     <title>stripes.lol</title>
+    <link rel="icon" href="151.png">
     <link rel="stylesheet" href="styles.css">
     <style>
         body.intro {
             background-color: var(--beat-color-pulse, var(--bg));
-            background-image: radial-gradient(ellipse at 50% 0%, rgba(229, 72, 77, 0.10), transparent 60%);
         }
     </style>
 </head>
@@ -22,95 +27,105 @@
             <div class="intro-cta" id="enter-status">Click to Enter...</div>
         </div>
     </a>
+    <nav class="topbar">
+        <span class="brand"><span class="dot"></span>stripes.lol</span>
+    </nav>
 
     <div class="main-content" id="site-content">
         <div class="page">
             <header class="hero">
-                <img class="avatar" src="151.png" alt="StripesVR profile picture">
+                <div class="avatar-wrap"><img class="avatar" src="151.png" alt="StripesVR profile picture"></div>
                 <h1 class="hero-title">stripes.lol</h1>
+                <p class="hero-sub">Downloads, tools and links</p>
             </header>
 
             <div class="sub-locker" id="subscription-modal">
-                <h3>ATTENTION</h3>
+                <h3>Attention</h3>
                 <p>Please Subscribe to my channel before continuing to my site.</p>
                 <a href="https://youtube.com/@virtualstripes?sub_confirmation=1" target="_blank" rel="noopener" class="btn btn-primary btn-block" id="subscribe-action-btn">1. Subscribe on YouTube</a>
                 <p class="error-msg" id="locker-error">Please complete step 1 before checking status!</p>
                 <button class="btn btn-block" type="button" id="verify-action-btn">2. Check Verification</button>
             </div>
 
-            <section class="section">
-            <p class="section-label">Links</p>
-                <nav class="list" id="menu-links">
-            <a class="row" href="frida.html">
+            <main class="section">
+        <p class="section-label">Links</p>
+        <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input type="search" placeholder="Search links" aria-label="Search links" data-filter="#menu-links" autocomplete="off" spellcheck="false">
+            <kbd>/</kbd>
+        </div>
+        <p class="empty" data-empty>Nothing matches that search.</p>
+            <nav class="list" id="menu-links">
+            <a class="row" href="frida.html" data-search="frida tools needed for every mod in here!" style="--i:0">
                 <span class="row-body">
                     <span class="row-title">Frida Tools</span>
                     <span class="row-desc">Needed For Every Mod In Here!</span>
                 </span>
                 <span class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span>
             </a>
-            <a class="row" href="https://discord.gg/XnFxrkuKM5">
+            <a class="row" href="https://discord.gg/XnFxrkuKM5" data-search="eic modding standalone no pc animal company mod" style="--i:1">
                 <span class="row-body">
                     <span class="row-title">EIC Modding</span>
                     <span class="row-desc">standalone no PC animal company mod</span>
                 </span>
                 <span class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></span>
             </a>
-            <a class="row" href="stripesadb.html">
+            <a class="row" href="stripesadb.html" data-search="stripesadb all the downloads needed for stripesadb" style="--i:2">
                 <span class="row-body">
                     <span class="row-title">StripesADB</span>
                     <span class="row-desc">All The Downloads Needed For StripesADB</span>
                 </span>
                 <span class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span>
             </a>
-            <a class="row" href="standy.html">
+            <a class="row" href="standy.html" data-search="standy mod download n stuff for standy mod works for every game!" style="--i:3">
                 <span class="row-body">
                     <span class="row-title">Standy Mod</span>
                     <span class="row-desc">Download N Stuff For Standy Mod Works For Every Game!</span>
                 </span>
                 <span class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span>
             </a>
-            <a class="row" href="iistupid.html">
+            <a class="row" href="iistupid.html" data-search="ii stupid menu standalone coming soon soon" style="--i:4">
                 <span class="row-body">
-                    <span class="row-title">II Stupid Menu Standalone</span>
+                    <span class="row-title">II Stupid Menu Standalone <span class="badge badge-soon">Soon</span></span>
                     <span class="row-desc">Coming Soon</span>
                 </span>
                 <span class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span>
             </a>
-            <a class="row" href="https://discord.gg/spm">
+            <a class="row" href="https://discord.gg/spm" data-search="spm gorilla tag mods mod menu no pc" style="--i:5">
                 <span class="row-body">
                     <span class="row-title">SPM Gorilla Tag Mods</span>
                     <span class="row-desc">Mod Menu No PC</span>
                 </span>
                 <span class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></span>
             </a>
-            <a class="row" href="https://github.com/stripesvr/StripesHub/releases/tag/mods">
+            <a class="row" href="https://github.com/stripesvr/StripesHub/releases/tag/mods" data-search="fangame modder ye, mods fangames" style="--i:6">
                 <span class="row-body">
                     <span class="row-title">Fangame Modder</span>
                     <span class="row-desc">ye, mods fangames</span>
                 </span>
                 <span class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></span>
             </a>
-            <a class="row" href="delta.html">
+            <a class="row" href="delta.html" data-search="delta delta new adb" style="--i:7">
                 <span class="row-body">
                     <span class="row-title">Delta</span>
                     <span class="row-desc">delta new adb</span>
                 </span>
                 <span class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span>
             </a>
-            <a class="row" href="moonlitv2.html">
+            <a class="row" href="moonlitv2.html" data-search="moonlitv2 the best moonlit" style="--i:8">
                 <span class="row-body">
                     <span class="row-title">MoonlitV2</span>
                     <span class="row-desc">The BEST Moonlit</span>
                 </span>
                 <span class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span>
             </a>
-                </nav>
-            </section>
+            </nav>
+            </main>
 
-            <footer class="footer"><span>stripes.lol</span></footer>
+            <footer class="footer">stripes.lol</footer>
         </div>
     </div>
 
     <script src="intro.js"></script>
+    <script src="site.js" defer></script>
 </body>
 </html>

@@ -273,9 +273,11 @@
                 grid-template-columns: 84px minmax(0, 1fr);
             }
         }
+
+        body.tool::before, body.tool::after { display: none; }
     </style>
 </head>
-<body>
+<body class="tool">
 
     <header>
         <h1>StreamClip Studio <span class="badge">PRO CORE</span></h1>
@@ -343,7 +345,7 @@
                             <option value="cinematic">Cinematic Cyber Teal Matrix</option>
                         </select>
                     </div>
-                    <button class="primary" style="margin-top: 8px;" onclick="triggerCompilationExport()">Compile & Render Track</button>
+                    <button class="btn btn-primary" style="margin-top: 8px;" onclick="triggerCompilationExport()">Compile & Render Track</button>
                 </div>
             </div>
 

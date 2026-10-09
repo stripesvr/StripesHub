@@ -4,14 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#07070a">
+    <meta name="description" content="N5 Modding on stripes.lol">
+    <meta property="og:title" content="N5 Modding">
+    <meta property="og:description" content="N5 Modding on stripes.lol">
+    <meta property="og:image" content="https://stripes.lol/151.png">
     <title>N5 Modding</title>
+    <link rel="icon" href="151.png">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="progress" aria-hidden="true"></div>
     <div class="page">
         <nav class="topbar">
             <a class="back" href="https://stripesvr.github.io/StripesHub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m11 6-6 6 6 6"/></svg>Home</a>
-            <span class="wordmark">stripes.lol</span>
+            <div class="topbar-right">
+                <button class="btn btn-ghost btn-sm" type="button" data-copy-link aria-label="Copy link to this page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg><span>Share</span></button>
+                <span class="brand"><span class="dot"></span>stripes.lol</span>
+            </div>
         </nav>
 
         <header class="header">
@@ -21,14 +31,14 @@
 
         <main>
         <div class="list">
-            <a class="row" href="N5 menu fix.zip" download>
+            <a class="row" href="N5 menu fix.zip" data-search="n5 menu n5 menu download (free version)" style="--i:0" download>
                 <span class="row-body">
                     <span class="row-title">N5 Menu</span>
                     <span class="row-desc">N5 Menu Download (Free Version)</span>
                 </span>
                 <span class="row-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg></span>
             </a>
-            <a class="row" href="https://discord.gg/n5mh" target="_blank" rel="noopener">
+            <a class="row" href="https://discord.gg/n5mh" data-search="n5 discord server join the server for modding updates and paid menu version!" style="--i:1" target="_blank" rel="noopener">
                 <span class="row-body">
                     <span class="row-title">N5 Discord Server</span>
                     <span class="row-desc">Join The Server For Modding Updates And Paid Menu Version!</span>
@@ -37,6 +47,8 @@
             </a>
         </div>
         </main>
+
+        <footer class="footer">stripes.lol</footer>
     </div>
     <script src="site.js" defer></script>
 </body>

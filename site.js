@@ -1,5 +1,35 @@
-// Copy-to-clipboard for command snippets. Each snippet sits in a .cmd row with a .btn-copy button.
+// Shared behavior: copy buttons, copy-all, share link, live search, pointer sheen, scroll progress, toast.
 (function () {
+  var toastEl = null;
+  var toastTimer = null;
+  var progressEl = document.querySelector(".progress");
+
+  function toast(message) {
+    if (!toastEl) {
+      toastEl = document.createElement("div");
+      toastEl.className = "toast";
+      toastEl.setAttribute("role", "status");
+      toastEl.setAttribute("aria-live", "polite");
+      document.body.appendChild(toastEl);
+    }
+    toastEl.innerHTML =
+      '<svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" ' +
+      'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+    toastEl.appendChild(document.createTextNode(message));
+    toastEl.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toastEl.classList.remove("show");
+    }, 1900);
+  }
+
+  function copyText(text) {
+    if (!navigator.clipboard) {
+      return Promise.reject(new Error("Clipboard unavailable"));
+    }
+    return navigator.clipboard.writeText(text);
+  }
+
   function setLabel(button, label, done) {
     var span = button.querySelector("span");
     if (!span) return;
@@ -13,22 +43,106 @@
   }
 
   document.addEventListener("click", function (event) {
-    var button = event.target.closest(".btn-copy");
-    if (!button) return;
-
-    var row = button.closest(".cmd");
-    var code = row && row.querySelector("code");
-    if (!code) return;
-
-    var text = code.textContent.trim();
-    if (!navigator.clipboard) {
-      setLabel(button, "Failed", false);
+    var copyBtn = event.target.closest(".btn-copy");
+    if (copyBtn) {
+      var row = copyBtn.closest(".cmd");
+      var code = row && row.querySelector("code");
+      if (!code) return;
+      copyText(code.textContent.trim()).then(
+        function () {
+          setLabel(copyBtn, "Copied", true);
+          toast("Command copied");
+        },
+        function () {
+          setLabel(copyBtn, "Failed", false);
+          toast("Copy failed. Select the text instead.");
+        }
+      );
       return;
     }
 
-    navigator.clipboard.writeText(text).then(
-      function () { setLabel(button, "Copied", true); },
-      function () { setLabel(button, "Failed", false); }
-    );
+    var allBtn = event.target.closest("[data-copy-all]");
+    if (allBtn) {
+      var group = document.querySelector(allBtn.getAttribute("data-copy-all"));
+      if (!group) return;
+      var lines = Array.prototype.map.call(group.querySelectorAll("code"), function (c) {
+        return c.textContent.trim();
+      });
+      copyText(lines.join("\n")).then(
+        function () {
+          toast("All " + lines.length + " commands copied");
+        },
+        function () {
+          toast("Copy failed. Select the text instead.");
+        }
+      );
+      return;
+    }
+
+    var linkBtn = event.target.closest("[data-copy-link]");
+    if (linkBtn) {
+      copyText(window.location.href).then(
+        function () {
+          toast("Link copied");
+        },
+        function () {
+          toast("Copy failed. Use the address bar instead.");
+        }
+      );
+    }
   });
+
+  // Live search: filters any element marked data-search inside the target list.
+  var search = document.querySelector("[data-filter]");
+  if (search) {
+    var items = document.querySelectorAll(search.getAttribute("data-filter") + " [data-search]");
+    var empty = document.querySelector("[data-empty]");
+
+    var apply = function () {
+      var query = search.value.trim().toLowerCase();
+      var shown = 0;
+      Array.prototype.forEach.call(items, function (el) {
+        var hit = !query || el.getAttribute("data-search").indexOf(query) !== -1;
+        el.hidden = !hit;
+        if (hit) shown++;
+      });
+      if (empty) empty.classList.toggle("show", shown === 0);
+    };
+
+    search.addEventListener("input", apply);
+
+    document.addEventListener("keydown", function (event) {
+      var active = document.activeElement;
+      var typing = active && /^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName);
+      if (event.key === "/" && !typing) {
+        event.preventDefault();
+        search.focus();
+      } else if (event.key === "Escape" && active === search) {
+        search.value = "";
+        apply();
+        search.blur();
+      }
+    });
+  }
+
+  // Pointer sheen on rows and cards.
+  document.addEventListener("pointermove", function (event) {
+    var el = event.target.closest && event.target.closest(".row, .card");
+    if (!el) return;
+    var box = el.getBoundingClientRect();
+    el.style.setProperty("--mx", event.clientX - box.left + "px");
+    el.style.setProperty("--my", event.clientY - box.top + "px");
+  });
+
+  // Scroll progress bar.
+  if (progressEl) {
+    var updateProgress = function () {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var ratio = max > 0 ? window.scrollY / max : 0;
+      progressEl.style.setProperty("--p", Math.min(1, Math.max(0, ratio)).toFixed(4));
+    };
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", updateProgress);
+    updateProgress();
+  }
 })();
