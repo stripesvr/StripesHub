@@ -803,3 +803,22 @@ img {
     display: none;
   }
 }
+
+/* ---------- Cursor trail canvas ---------- */
+
+.cursor-trail {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 59;
+  pointer-events: none;
+}
+
+/* Rows rendered as buttons (copy-text rows) look like links. */
+button.row {
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}

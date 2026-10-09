@@ -79,6 +79,21 @@
       return;
     }
 
+    // Any element with data-copy-text copies that text. Links keep their default action,
+    // so a "download + copy" link still downloads while it copies.
+    var textBtn = event.target.closest("[data-copy-text]");
+    if (textBtn) {
+      copyText(textBtn.getAttribute("data-copy-text")).then(
+        function () {
+          toast("Copied to clipboard");
+        },
+        function () {
+          toast("Copy failed. Select the text instead.");
+        }
+      );
+      return;
+    }
+
     var linkBtn = event.target.closest("[data-copy-link]");
     if (linkBtn) {
       copyText(window.location.href).then(
