@@ -869,23 +869,104 @@ button.row {
   }
 }
 
-/* ---------- Site view counter (bottom left) ---------- */
+/* ---------- Bottom-left dock: music toggle and view counter ---------- */
 
-.views {
+.dock {
   position: fixed;
   left: 18px;
   bottom: 18px;
   z-index: 9500;
-  opacity: 0.85;
-  transition: opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dock > * {
+  height: 40px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: rgba(18, 18, 22, 0.85);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 28px -14px rgba(0, 0, 0, 0.8);
+}
+
+.music-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px 0 14px;
+  color: var(--text-muted);
+  font: 600 0.8rem/1 var(--font-sans);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.music-toggle:hover {
+  color: var(--text);
+  border-color: #40404d;
+}
+
+.music-toggle[aria-pressed="true"] {
+  color: var(--text);
+}
+
+.eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  width: 14px;
+  height: 12px;
+}
+
+.eq i {
+  display: block;
+  width: 3px;
+  height: 4px;
+  border-radius: 1px;
+  background: var(--accent);
+}
+
+.music-toggle[aria-pressed="true"] .eq i {
+  animation: eq 0.9s ease-in-out infinite;
+}
+
+.music-toggle[aria-pressed="true"] .eq i:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.music-toggle[aria-pressed="true"] .eq i:nth-child(3) {
+  animation-delay: -0.6s;
+}
+
+@keyframes eq {
+  0%, 100% { height: 4px; }
+  50% { height: 12px; }
+}
+
+.views {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 12px 0 11px;
+  color: var(--text-muted);
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 
 .views:hover {
-  opacity: 1;
+  color: var(--text);
+  border-color: #40404d;
+}
+
+.views svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
 }
 
 .views img {
   display: block;
-  height: 22px;
+  height: 20px;
   width: auto;
+  border-radius: 6px;
 }

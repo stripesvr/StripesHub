@@ -225,16 +225,34 @@
     if (!rafId) rafId = requestAnimationFrame(tick);
   }
 
+  // ---------- Music toggle (bottom-left dock) ----------
+
+  var toggle = document.querySelector(".music-toggle");
+
+  function updateToggle() {
+    if (!toggle) return;
+    toggle.setAttribute("aria-pressed", playing ? "true" : "false");
+    toggle.querySelector(".music-label").textContent = playing ? "Music on" : "Music off";
+  }
+
+  if (toggle) {
+    toggle.addEventListener("click", function () {
+      if (playing) pause(); else play();
+    });
+  }
+
   // ---------- Audio events ----------
 
   audio.addEventListener("play", function () {
     playing = true;
+    updateToggle();
     save();
     startLoop();
   });
 
   audio.addEventListener("pause", function () {
     playing = false;
+    updateToggle();
     document.documentElement.style.setProperty("--beat-glow", "0px");
     save();
   });
@@ -299,24 +317,30 @@
     });
   }
 
-  function bindHome() {
+  // Click-to-enter gate on every page. Once entered, it stays dismissed for this tab.
+  function bindGate() {
     var overlay = document.getElementById("overlay-screen");
     var site = document.getElementById("site-content");
-    if (!overlay || !site) return;
+    if (!overlay) return;
 
     if (unlocked()) {
       overlay.classList.add("hidden");
-      site.classList.add("active");
-    } else {
-      overlay.onclick = function () {
-        var status = document.getElementById("enter-status");
-        if (status) status.textContent = "Loading Track...";
-        markUnlocked();
-        overlay.classList.add("hidden");
-        site.classList.add("active");
-        play();
-      };
+      if (site) site.classList.add("active");
+      return;
     }
+
+    overlay.onclick = function () {
+      var status = document.getElementById("enter-status");
+      if (status) status.textContent = "Loading Track...";
+      markUnlocked();
+      overlay.classList.add("hidden");
+      if (site) site.classList.add("active");
+      play();
+    };
+  }
+
+  function bindHome() {
+    bindGate();
     subscribeLock();
   }
 
@@ -355,6 +379,10 @@
         document.body.className = doc.body.className;
 
         current.replaceWith(document.adoptNode(incoming));
+        // The home page brings its own gate inside the swapped content, so drop any leftover gate.
+        if (document.querySelector("#app #overlay-screen")) {
+          document.querySelectorAll("body > #overlay-screen").forEach(function (el) { el.remove(); });
+        }
         if (push) history.pushState({}, "", url);
         window.scrollTo(0, 0);
         afterSwap();
@@ -391,6 +419,7 @@
     else audio.addEventListener("loadedmetadata", function () { audio.currentTime = saved.t; }, { once: true });
   }
 
+  updateToggle();
   bindHome();
 
   // Exposed for debugging and tests.
