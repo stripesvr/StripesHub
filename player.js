@@ -8,7 +8,6 @@
   var VOLUME = 0.05;      // background volume, 0.0 to 1.0
   var START_AT = 7;       // seconds to skip into the track on a fresh start
   var STORE = "stripes_music";
-  var UNLOCK = "stripes_unlocked";
 
   var audio = document.getElementById("bg-audio");
   var canvas = document.getElementById("lightning-canvas");
@@ -270,15 +269,11 @@
   window.addEventListener("resize", resize);
   resize();
 
-  // ---------- Home gate: subscribe lock and "Click to Enter" ----------
+  // ---------- Home gate: subscribe lock and click-to-enter ----------
 
-  function unlocked() {
-    try { return sessionStorage.getItem(UNLOCK) === "1"; } catch (e) { return false; }
-  }
-
-  function markUnlocked() {
-    try { sessionStorage.setItem(UNLOCK, "1"); } catch (e) { /* ignore */ }
-  }
+  // The gate is shown on every full page load. Moving between pages on the site
+  // (soft navigation) keeps the visitor's choice in memory, so the gate stays dismissed.
+  var entered = false;
 
   function subscribeLock() {
     var container = document.getElementById("menu-links");
@@ -317,13 +312,13 @@
     });
   }
 
-  // Click-to-enter gate on every page. Once entered, it stays dismissed for this tab.
+  // Click-to-enter gate on every page.
   function bindGate() {
     var overlay = document.getElementById("overlay-screen");
     var site = document.getElementById("site-content");
     if (!overlay) return;
 
-    if (unlocked()) {
+    if (entered) {
       overlay.classList.add("hidden");
       if (site) site.classList.add("active");
       return;
@@ -332,7 +327,7 @@
     overlay.onclick = function () {
       var status = document.getElementById("enter-status");
       if (status) status.textContent = "Loading Track...";
-      markUnlocked();
+      entered = true;
       overlay.classList.add("hidden");
       if (site) site.classList.add("active");
       play();
