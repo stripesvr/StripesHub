@@ -1,11 +1,12 @@
 // Cursor glow with a fading trail. Skipped on touch/coarse pointers and for reduced motion.
 (function () {
-  var fine = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  // Reduced motion keeps the normal cursor.
   var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (!fine || still) return;
+  if (still) return;
 
-  // Replace the system pointer with the custom ring everywhere.
-  document.documentElement.classList.add("custom-cursor");
+  // The custom cursor switches on at the first real mouse movement, so laptops whose
+  // pointer is reported as "coarse" still get it. Touch-only devices never trigger it.
+  var active = false;
 
   var TRAIL_MS = 480;
   var TRAIL_MAX = 48;
@@ -43,7 +44,11 @@
   var points = [];
 
   document.addEventListener("pointermove", function (event) {
-    if (event.pointerType === "touch") return;
+    if (event.pointerType !== "mouse") return;
+    if (!active) {
+      active = true;
+      document.documentElement.classList.add("custom-cursor");
+    }
     targetX = event.clientX;
     targetY = event.clientY;
     points.push({ x: event.clientX, y: event.clientY, t: performance.now() });
