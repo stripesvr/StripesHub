@@ -4,6 +4,9 @@
   var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!fine || still) return;
 
+  // Replace the system pointer with the custom ring everywhere.
+  document.documentElement.classList.add("custom-cursor");
+
   var TRAIL_MS = 480;
   var TRAIL_MAX = 48;
   var RED = "255, 77, 85";
@@ -54,7 +57,8 @@
     glow.classList.toggle("hot", hot);
   });
 
-  document.addEventListener("pointerleave", function () {
+  // Hide the ring when the pointer leaves the browser window.
+  document.documentElement.addEventListener("mouseleave", function () {
     shown = false;
     points = [];
     glow.classList.remove("visible");

@@ -804,6 +804,19 @@ img {
   }
 }
 
+/* ---------- Custom cursor (fine pointers only; set by cursor.js) ---------- */
+
+.custom-cursor,
+.custom-cursor * {
+  cursor: none !important;
+}
+
+/* Text fields keep the text cursor so selecting and editing still work. */
+.custom-cursor input:not([type="button"]):not([type="submit"]):not([type="checkbox"]):not([type="range"]),
+.custom-cursor textarea {
+  cursor: text !important;
+}
+
 /* ---------- Cursor trail canvas ---------- */
 
 .cursor-trail {
