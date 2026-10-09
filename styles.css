@@ -654,15 +654,21 @@ img {
 }
 
 .intro-cta {
-  padding: 15px 26px;
-  border: 1px solid var(--border-strong);
+  padding: 18px 36px;
+  border: 1px solid rgba(255, 77, 85, 0.55);
   border-radius: var(--radius-pill);
   background: var(--surface);
-  font-size: 0.8125rem;
-  font-weight: 600;
+  font-size: 0.9rem;
+  font-weight: 650;
   letter-spacing: 0.16em;
   text-transform: uppercase;
+  animation: gate-pulse 2.4s ease-in-out infinite;
   transition: border-color 0.25s ease, color 0.25s ease;
+}
+
+@keyframes gate-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 77, 85, 0.25); }
+  50% { box-shadow: 0 0 0 10px rgba(255, 77, 85, 0); }
 }
 
 .intro-overlay:hover .intro-cta {
@@ -845,12 +851,9 @@ button.row {
   --tx: 0;
   --ty: 0;
   --lift: 0px;
-  --mx: 50%;
-  --my: 50%;
   transform-style: preserve-3d;
   transform: perspective(800px) translateY(var(--lift)) rotateX(calc(var(--ty) * -10deg)) rotateY(calc(var(--tx) * 10deg));
   box-shadow: calc(var(--tx) * -16px) calc(var(--ty) * -16px + 16px) 32px -14px rgba(0, 0, 0, 0.75);
-  background-image: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.11), transparent 55%);
   transition: transform 0.2s var(--ease), box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
 }
 
