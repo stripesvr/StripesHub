@@ -100,32 +100,6 @@
     }
   }
 
-  // ---------- Toggle button ----------
-
-  var toggle = null;
-
-  function buildToggle() {
-    toggle = document.querySelector(".music-toggle");
-    if (toggle) return;
-    toggle = document.createElement("button");
-    toggle.type = "button";
-    toggle.className = "music-toggle";
-    toggle.setAttribute("aria-pressed", "false");
-    toggle.innerHTML =
-      '<span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>' +
-      '<span class="music-label">Music off</span>';
-    toggle.addEventListener("click", function () {
-      if (playing) pause(); else play();
-    });
-    document.body.appendChild(toggle);
-  }
-
-  function updateToggle() {
-    if (!toggle) return;
-    toggle.setAttribute("aria-pressed", playing ? "true" : "false");
-    toggle.querySelector(".music-label").textContent = playing ? "Music on" : "Music off";
-  }
-
   // ---------- Lightning ----------
 
   function resize() {
@@ -255,14 +229,12 @@
 
   audio.addEventListener("play", function () {
     playing = true;
-    updateToggle();
     save();
     startLoop();
   });
 
   audio.addEventListener("pause", function () {
     playing = false;
-    updateToggle();
     document.documentElement.style.setProperty("--beat-glow", "0px");
     save();
   });
@@ -411,9 +383,6 @@
   });
 
   // ---------- Start ----------
-
-  buildToggle();
-  updateToggle();
 
   var saved = readSaved();
   if (saved && saved.t > 0) {
