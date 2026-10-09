@@ -90,7 +90,7 @@ img {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 60;
+  z-index: 10001;
   width: 26px;
   height: 26px;
   margin: -13px 0 0 -13px;
@@ -823,7 +823,7 @@ img {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 59;
+  z-index: 10000;
   pointer-events: none;
 }
 
