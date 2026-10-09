@@ -845,10 +845,13 @@ button.row {
   --tx: 0;
   --ty: 0;
   --lift: 0px;
+  --mx: 50%;
+  --my: 50%;
   transform-style: preserve-3d;
-  transform: perspective(900px) translateY(var(--lift)) rotateX(calc(var(--ty) * -7deg)) rotateY(calc(var(--tx) * 7deg));
-  box-shadow: calc(var(--tx) * -12px) calc(var(--ty) * -12px + 12px) 28px -14px rgba(0, 0, 0, 0.7);
-  transition: transform 0.25s var(--ease), box-shadow 0.25s ease, border-color 0.2s ease, background-color 0.2s ease;
+  transform: perspective(800px) translateY(var(--lift)) rotateX(calc(var(--ty) * -10deg)) rotateY(calc(var(--tx) * 10deg));
+  box-shadow: calc(var(--tx) * -16px) calc(var(--ty) * -16px + 16px) 32px -14px rgba(0, 0, 0, 0.75);
+  background-image: radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.11), transparent 55%);
+  transition: transform 0.2s var(--ease), box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .row:hover,

@@ -166,6 +166,8 @@
       if (!el) return;
       el.style.removeProperty("--tx");
       el.style.removeProperty("--ty");
+      el.style.removeProperty("--mx");
+      el.style.removeProperty("--my");
       if (current === el) current = null;
     }
 
@@ -181,6 +183,8 @@
       var ty = ((event.clientY - box.top) / box.height) * 2 - 1;
       el.style.setProperty("--tx", tx.toFixed(3));
       el.style.setProperty("--ty", ty.toFixed(3));
+      el.style.setProperty("--mx", ((event.clientX - box.left) / box.width * 100).toFixed(1) + "%");
+      el.style.setProperty("--my", ((event.clientY - box.top) / box.height * 100).toFixed(1) + "%");
     });
 
     document.documentElement.addEventListener("mouseleave", function () {
