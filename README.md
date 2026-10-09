@@ -8,13 +8,12 @@
 
 [![Live](https://img.shields.io/badge/site-stripes.lol-ff4d55?style=for-the-badge&labelColor=121216)](https://stripes.lol)
 [![Visits](https://hits.sh/github.com/stripesvr/StripesHub.svg?style=for-the-badge&label=visits&color=ff4d55&labelColor=121216)](https://stripes.lol)
-[![Music](https://img.shields.io/badge/music-on%20enter-ff4d55?style=for-the-badge&labelColor=121216)](https://stripes.lol)
 
 </div>
 
 ---
 
-## 🎵 Using the site
+## Using the site
 
 | | |
 | --- | --- |
@@ -23,13 +22,13 @@
 | **Copy** | Command buttons copy the text straight to your clipboard. |
 | **Hover** | Buttons and cards tilt toward your cursor. |
 
-## 📦 Downloads
+## Downloads
 
 ![Downloads](https://img.shields.io/badge/downloads-read%20the%20notes%20first-ff4d55?style=flat-square&labelColor=121216)
 
 Read the notes on each page before you install anything. Files are shared as they are, and you install them at your own risk.
 
-## ⚖️ Copyright
+## Copyright
 
 ![Copyright](https://img.shields.io/badge/%C2%A9%20stripes.lol-all%20rights%20reserved-ff4d55?style=flat-square&labelColor=121216)
 
@@ -38,11 +37,3 @@ Read the notes on each page before you install anything. Files are shared as the
 **Don't skid it. Don't copy it.** Don't re-upload the files, the code, or the design anywhere else.
 
 If you want to use something from this site, ask first. If I find it copied, I will contact legal.
-
----
-
-<div align="center">
-
-Made with a lot of red. 🔴
-
-</div>
