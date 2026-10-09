@@ -125,15 +125,6 @@
     });
   }
 
-  // Pointer sheen on rows and cards.
-  document.addEventListener("pointermove", function (event) {
-    var el = event.target.closest && event.target.closest(".row, .card");
-    if (!el) return;
-    var box = el.getBoundingClientRect();
-    el.style.setProperty("--mx", event.clientX - box.left + "px");
-    el.style.setProperty("--my", event.clientY - box.top + "px");
-  });
-
   // Scroll progress bar.
   if (progressEl) {
     var updateProgress = function () {
