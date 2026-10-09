@@ -408,10 +408,11 @@ img {
   overflow-wrap: anywhere;
 }
 
+/* Download and link buttons share one size: 40px, on both link rows and mod cards. */
 .row-icon {
   flex: none;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   display: grid;
   place-items: center;
   border-radius: var(--radius-pill);
@@ -473,7 +474,7 @@ img {
 
 .card-head {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 16px;
 }
