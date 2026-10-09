@@ -14,10 +14,13 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <canvas id="lightning-canvas" aria-hidden="true"></canvas>
+    <audio id="bg-audio" preload="none" crossorigin="anonymous"></audio>
+    <div id="app">
     <div class="progress" aria-hidden="true"></div>
     <div class="page">
         <nav class="topbar">
-            <a class="back" href="https://stripesvr.github.io/StripesHub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m11 6-6 6 6 6"/></svg>Home</a>
+            <a class="back" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m11 6-6 6 6 6"/></svg>Home</a>
             <div class="topbar-right">
                 <button class="btn btn-ghost btn-sm" type="button" data-copy-link aria-label="Copy link to this page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg><span>Share</span></button>
             </div>
@@ -123,7 +126,9 @@
 
         <footer class="footer">stripes.lol</footer>
     </div>
+    </div>
     <script src="site.js" defer></script>
     <script src="cursor.js" defer></script>
+    <script src="player.js" defer></script>
 </body>
 </html>

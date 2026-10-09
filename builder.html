@@ -420,6 +420,9 @@
                 '    <link rel="stylesheet" href="styles.css">\n' +
                 "</head>\n" +
                 "<body>\n" +
+                '    <canvas id="lightning-canvas" aria-hidden="true"></canvas>\n' +
+                '    <audio id="bg-audio" preload="none" crossorigin="anonymous"></audio>\n' +
+                '    <div id="app">\n' +
                 '    <div class="progress" aria-hidden="true"></div>\n' +
                 '    <div class="page">\n' +
                 '        <nav class="topbar">\n' +
@@ -440,8 +443,10 @@
                 "        </main>\n\n" +
                 '        <footer class="footer">stripes.lol</footer>\n' +
                 "    </div>\n" +
+                "    </div>\n" +
                 '    <script src="site.js" defer><\/script>\n' +
                 '    <script src="cursor.js" defer><\/script>\n' +
+                '    <script src="player.js" defer><\/script>\n' +
                 "</body>\n" +
                 "</html>\n";
         }

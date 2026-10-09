@@ -865,3 +865,68 @@ button.row {
     transition: none;
   }
 }
+
+/* ---------- Music toggle (player.js) ---------- */
+
+.music-toggle {
+  position: fixed;
+  left: 18px;
+  bottom: 18px;
+  z-index: 9500;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 16px 0 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: rgba(18, 18, 22, 0.85);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  color: var(--text-muted);
+  font: 600 0.8rem/1 var(--font-sans);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.music-toggle:hover {
+  color: var(--text);
+  border-color: #40404d;
+}
+
+.music-toggle[aria-pressed="true"] {
+  color: var(--text);
+}
+
+.eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  width: 14px;
+  height: 12px;
+}
+
+.eq i {
+  display: block;
+  width: 3px;
+  height: 4px;
+  border-radius: 1px;
+  background: var(--accent);
+}
+
+.music-toggle[aria-pressed="true"] .eq i {
+  animation: eq 0.9s ease-in-out infinite;
+}
+
+.music-toggle[aria-pressed="true"] .eq i:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.music-toggle[aria-pressed="true"] .eq i:nth-child(3) {
+  animation-delay: -0.6s;
+}
+
+@keyframes eq {
+  0%, 100% { height: 4px; }
+  50% { height: 12px; }
+}

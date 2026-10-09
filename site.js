@@ -107,38 +107,53 @@
     }
   });
 
-  // Live search: filters any element marked data-search inside the target list.
-  var search = document.querySelector("[data-filter]");
-  if (search) {
-    var items = document.querySelectorAll(search.getAttribute("data-filter") + " [data-search]");
+  // Live search: any input with data-filter filters the elements marked data-search inside its target.
+  // Delegated, so it keeps working on pages swapped in by soft navigation.
+  function applySearch(input) {
+    var items = document.querySelectorAll(input.getAttribute("data-filter") + " [data-search]");
     var empty = document.querySelector("[data-empty]");
+    var query = input.value.trim().toLowerCase();
+    var shown = 0;
+    Array.prototype.forEach.call(items, function (el) {
+      var hit = !query || el.getAttribute("data-search").indexOf(query) !== -1;
+      el.hidden = !hit;
+      if (hit) shown++;
+    });
+    if (empty) empty.classList.toggle("show", shown === 0);
+  }
 
-    var apply = function () {
-      var query = search.value.trim().toLowerCase();
-      var shown = 0;
-      Array.prototype.forEach.call(items, function (el) {
-        var hit = !query || el.getAttribute("data-search").indexOf(query) !== -1;
-        el.hidden = !hit;
-        if (hit) shown++;
-      });
-      if (empty) empty.classList.toggle("show", shown === 0);
-    };
+  document.addEventListener("input", function (event) {
+    if (event.target.matches && event.target.matches("[data-filter]")) applySearch(event.target);
+  });
 
-    search.addEventListener("input", apply);
-
-    document.addEventListener("keydown", function (event) {
-      var active = document.activeElement;
-      var typing = active && /^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName);
-      if (event.key === "/" && !typing) {
+  document.addEventListener("keydown", function (event) {
+    var active = document.activeElement;
+    var typing = active && /^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName);
+    if (event.key === "/" && !typing) {
+      var search = document.querySelector("[data-filter]");
+      if (search) {
         event.preventDefault();
         search.focus();
-      } else if (event.key === "Escape" && active === search) {
-        search.value = "";
-        apply();
-        search.blur();
       }
-    });
+    } else if (event.key === "Escape" && active && active.matches && active.matches("[data-filter]")) {
+      active.value = "";
+      applySearch(active);
+      active.blur();
+    }
+  });
+
+  // Scroll progress bar. Looked up on each update, so it follows soft navigation.
+  function updateProgress() {
+    var bar = document.querySelector(".progress");
+    if (!bar) return;
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var ratio = max > 0 ? window.scrollY / max : 0;
+    bar.style.setProperty("--p", Math.min(1, Math.max(0, ratio)).toFixed(4));
   }
+  window.addEventListener("scroll", updateProgress, { passive: true });
+  window.addEventListener("resize", updateProgress);
+  document.addEventListener("stripes:navigated", updateProgress);
+  updateProgress();
 
   // 3D tilt: buttons, rows, and cards lean toward the mouse. Mouse only; reduced motion stays flat.
   (function () {

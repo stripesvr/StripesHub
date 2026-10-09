@@ -20,8 +20,8 @@
 </head>
 <body class="intro">
     <canvas id="lightning-canvas" aria-hidden="true"></canvas>
-    <audio id="bg-audio" crossorigin="anonymous"></audio>
-
+    <audio id="bg-audio" preload="none" crossorigin="anonymous"></audio>
+    <div id="app">
     <a href="https://gtag.pro/stripes" target="_blank" rel="noopener" class="enter-link">
         <div class="intro-overlay" id="overlay-screen">
             <div class="intro-cta" id="enter-status">Click to Enter...</div>
@@ -119,9 +119,10 @@
             <footer class="footer">stripes.lol</footer>
         </div>
     </div>
+    </div>
 
-    <script src="intro.js"></script>
     <script src="site.js" defer></script>
     <script src="cursor.js" defer></script>
+    <script src="player.js" defer></script>
 </body>
 </html>
