@@ -140,6 +140,39 @@
     });
   }
 
+  // 3D tilt: buttons, rows, and cards lean toward the mouse. Mouse only; reduced motion stays flat.
+  (function () {
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    var SELECTOR = ".row, .card, .btn";
+    var current = null;
+
+    function reset(el) {
+      if (!el) return;
+      el.style.removeProperty("--tx");
+      el.style.removeProperty("--ty");
+      if (current === el) current = null;
+    }
+
+    document.addEventListener("pointermove", function (event) {
+      if (event.pointerType !== "mouse") return;
+      var el = event.target.closest && event.target.closest(SELECTOR);
+      if (current && current !== el) reset(current);
+      if (!el) return;
+
+      current = el;
+      var box = el.getBoundingClientRect();
+      var tx = ((event.clientX - box.left) / box.width) * 2 - 1;
+      var ty = ((event.clientY - box.top) / box.height) * 2 - 1;
+      el.style.setProperty("--tx", tx.toFixed(3));
+      el.style.setProperty("--ty", ty.toFixed(3));
+    });
+
+    document.documentElement.addEventListener("mouseleave", function () {
+      reset(current);
+    });
+  })();
+
   // Scroll progress bar.
   if (progressEl) {
     var updateProgress = function () {
