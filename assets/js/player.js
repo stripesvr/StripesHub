@@ -1,12 +1,9 @@
-// Shared player. Loaded on every page so the track, the lightning, and the music toggle
-// keep running while the visitor moves around the site. Internal links swap only the
-// page content (no full reload), so the audio element is never torn down.
 (function () {
   "use strict";
 
   var SONG = "assets/audio/song.mp3";
-  var VOLUME = 0.05;      // background volume, 0.0 to 1.0
-  var START_AT = 7;       // seconds to skip into the track on a fresh start
+  var VOLUME = 0.04;
+  var START_AT = 7;
   var STORE = "stripes_music";
 
   var audio = document.getElementById("bg-audio");
@@ -21,7 +18,6 @@
   var playing = false;
   var rafId = 0;
 
-  // Beat detection state.
   var prevEnergy = 0;
   var fluxHistory = [];
   var lastHit = 0;
@@ -32,7 +28,6 @@
   var W = 0;
   var H = 0;
 
-  // ---------- Storage (per tab, survives full page loads) ----------
 
   function readSaved() {
     try { return JSON.parse(sessionStorage.getItem(STORE) || "null"); } catch (e) { return null; }
@@ -44,7 +39,6 @@
     } catch (e) { /* storage blocked: playback still works, it just will not resume */ }
   }
 
-  // ---------- Audio ----------
 
   function ensureSrc(startAt) {
     if (audio.getAttribute("src")) return;
@@ -54,7 +48,6 @@
     }
   }
 
-  // The audio graph can only be created after a user gesture, so it is built on the first play.
   function ensureGraph() {
     if (graphReady) return;
     try {
@@ -86,8 +79,6 @@
     audio.pause();
   }
 
-  // Try to resume a track from the previous page without a gesture. Browsers may refuse it,
-  // in which case the toggle simply shows "Music off" until the visitor presses it.
   function tryResume(saved) {
     ensureSrc(null);
     audio.volume = VOLUME;
@@ -99,7 +90,6 @@
     }
   }
 
-  // ---------- Lightning ----------
 
   function resize() {
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -197,10 +187,8 @@
     }
 
     analyser.getByteFrequencyData(freq);
-    // Bass: the lowest few bins, roughly 0 to 375 Hz at 48 kHz.
     var energy = (freq[0] + freq[1] + freq[2] + freq[3]) / 4;
 
-    // Onset detection: a hit is a sudden rise in bass energy above its recent average.
     var rise = Math.max(0, energy - prevEnergy);
     prevEnergy = energy;
     fluxHistory.push(rise);
@@ -224,7 +212,6 @@
     if (!rafId) rafId = requestAnimationFrame(tick);
   }
 
-  // ---------- Music toggle (bottom-left dock) ----------
 
   var toggle = document.querySelector(".music-toggle");
 
@@ -240,7 +227,6 @@
     });
   }
 
-  // ---------- Audio events ----------
 
   audio.addEventListener("play", function () {
     playing = true;
@@ -269,10 +255,6 @@
   window.addEventListener("resize", resize);
   resize();
 
-  // ---------- Home gate: subscribe lock and click-to-enter ----------
-
-  // The gate is shown on every full page load. Moving between pages on the site
-  // (soft navigation) keeps the visitor's choice in memory, so the gate stays dismissed.
   var entered = false;
 
   function subscribeLock() {
@@ -312,7 +294,6 @@
     });
   }
 
-  // Click-to-enter gate on every page.
   function bindGate() {
     var overlay = document.getElementById("overlay-screen");
     var site = document.getElementById("site-content");
@@ -339,7 +320,6 @@
     subscribeLock();
   }
 
-  // ---------- Soft navigation ----------
 
   function isSoftLink(a) {
     if (!a || a.target || a.hasAttribute("download")) return false;
@@ -374,7 +354,6 @@
         document.body.className = doc.body.className;
 
         current.replaceWith(document.adoptNode(incoming));
-        // The home page brings its own gate inside the swapped content, so drop any leftover gate.
         if (document.querySelector("#app #overlay-screen")) {
           document.querySelectorAll("body > #overlay-screen").forEach(function (el) { el.remove(); });
         }
@@ -405,7 +384,6 @@
     swapTo(location.href, false);
   });
 
-  // ---------- Start ----------
 
   var saved = readSaved();
   if (saved && saved.t > 0) {
@@ -417,7 +395,6 @@
   updateToggle();
   bindHome();
 
-  // Exposed for debugging and tests.
   window.StripesPlayer = {
     isPlaying: function () { return playing; },
     beats: function () { return beats; }
