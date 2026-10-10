@@ -7,7 +7,7 @@
 **Mods, tools, downloads, and a few links, all in one place.**
 
 [![Live](https://img.shields.io/badge/site-stripes.lol-ff4d55?style=for-the-badge&labelColor=121216)](https://stripes.lol)
-[![Views](https://img.shields.io/badge/views-304%2C000%2B%20future%20views-ff4d55?style=for-the-badge&labelColor=121216)](https://stripes.lol)
+[![Views](https://img.shields.io/badge/views-304%2C000%2B%20-ff4d55?style=for-the-badge&labelColor=121216)](https://stripes.lol)
 
 </div>
 
